@@ -1,0 +1,158 @@
+body { font-family: 'Inter', sans-serif; }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+
+.table-container::-webkit-scrollbar { height: 4px; }
+.table-container::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+
+.htmx-indicator { opacity: 0; transition: opacity 200ms ease-in; }
+.htmx-request .htmx-indicator { opacity: 1; }
+.htmx-request.htmx-indicator { opacity: 1; }
+
+body[data-card-can-edit="false"] main button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* Use the table's available width, including space occupied by the sidebar. */
+#refunds-results {
+    container-type: inline-size;
+}
+
+.refunds-table {
+    --refunds-cell-padding: 1rem;
+    --refunds-label-color: #6b7280;
+}
+
+.refunds-table th,
+.refunds-table td {
+    padding-inline: var(--refunds-cell-padding);
+}
+
+.refunds-table th:nth-child(2) { width: 28%; }
+.refunds-table th:nth-child(3) { width: 17%; }
+.refunds-table th:nth-child(5) { width: 8.5rem; }
+.refunds-table th:nth-child(7) { width: 3.5rem; }
+
+.refunds-table td:nth-child(2),
+.refunds-table td:nth-child(3) {
+    overflow-wrap: anywhere;
+}
+
+.refunds-table td:nth-child(1),
+.refunds-table td:nth-child(4),
+.refunds-table td:nth-child(5),
+.refunds-table td:nth-child(6),
+.refunds-table td:nth-child(7) {
+    white-space: nowrap;
+}
+
+.refunds-table td:nth-child(6) > span {
+    display: inline-flex;
+    align-items: center;
+}
+
+@container (max-width: 56rem) {
+    .refunds-table,
+    .refunds-table tbody { display: block; }
+
+    .refunds-table thead { display: none; }
+
+    .refunds-table tr {
+        display: grid;
+        grid-template-columns: minmax(min-content, 1fr) minmax(0, 1fr);
+        grid-template-areas: "id action" "client client" "article article" "amount sent" "status status";
+        gap: 0.75rem 1rem;
+        padding: var(--refunds-cell-padding);
+    }
+
+    .refunds-table td { padding: 0; min-width: 0; }
+    .refunds-table td:nth-child(1) { grid-area: id; }
+    .refunds-table td:nth-child(2) { grid-area: client; }
+    .refunds-table td:nth-child(3) { grid-area: article; }
+    .refunds-table td:nth-child(4) { grid-area: amount; }
+    .refunds-table td:nth-child(5) { grid-area: sent; }
+    .refunds-table td:nth-child(6) { grid-area: status; }
+    .refunds-table td:nth-child(7) { grid-area: action; text-align: right; }
+    .refunds-table td[colspan] { grid-column: 1 / -1; padding-block: 2rem; }
+
+    .refunds-table td[data-label]:not([data-label=""])::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--refunds-label-color);
+        font-size: 0.625rem;
+        font-weight: 600;
+        white-space: normal;
+    }
+
+    .refunds-table + div > div {
+        flex-wrap: wrap;
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+@container (max-width: 18rem) {
+    .refunds-table tr {
+        grid-template-areas: "id id" "action action" "client client" "article article" "amount amount" "sent sent" "status status";
+    }
+}
+
+/* Плитки файлов: превью, под ним размер и действия. */
+.attachment-container { min-width: 0; }
+.attachment-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+    gap: 0.5rem;
+}
+.attachment-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 0;
+}
+.attachment-thumb {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 4.5rem;
+}
+.attachment-info { display: contents; }
+.attachment-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+.attachment-size {
+    overflow: hidden;
+    color: #6b7280;
+    font-size: 0.625rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.attachment-actions { display: flex; gap: 0.125rem; }
+.attachment-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+.attachment-action svg { width: 0.875rem; height: 0.875rem; }
+.attachment-action:focus-visible {
+    outline: 2px solid #111827;
+    outline-offset: 2px;
+}
+@media (pointer: coarse) {
+    .attachment-list { grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); }
+    .attachment-action { width: 2.25rem; height: 2.25rem; }
+}
+#image-lightbox-name { max-width: 100%; overflow-wrap: anywhere; }
