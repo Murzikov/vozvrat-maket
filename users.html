@@ -3,7 +3,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Пользователи – Система управления возвратами</title>
-<link href="static/css/tailwind.css?v=94cbc601d469" rel="stylesheet"/>
+<link href="static/css/tailwind.css?v=9c5ca75dbb8d" rel="stylesheet"/>
 
 <link href="static/css/fonts.css?v=46ceeff3d4ce" rel="stylesheet"/>
 <link href="static/css/custom.css?v=6f215958dc77" rel="stylesheet"/>
@@ -21,7 +21,7 @@
 <div class="flex items-center gap-2">
 <!-- Mobile bell icon -->
 <div class="relative">
-<button class="relative p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-colors" id="mobile-bell-btn">
+<button class="relative p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-colors" data-act="toggle:mobile-bell-dropdown" id="mobile-bell-btn">
 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span class="" id="mobile-bell-badge-wrap"><span id="bell-badge"></span></span>
 </button>
@@ -29,7 +29,7 @@
 <div class="hidden absolute right-0 top-full mt-1 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 z-[100] overflow-hidden" id="mobile-bell-dropdown">
 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
 <p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Уведомления</p>
-<button class="text-gray-400 hover:text-gray-600">
+<button class="text-gray-400 hover:text-gray-600" data-act="toggle:mobile-bell-dropdown">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
@@ -88,7 +88,7 @@
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h18M3 14h18m-9-4v10M5 4h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                     Работа с таблицами
                 </a>
-<button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors text-left" type="button">
+<button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors text-left" data-act="open:export-1c-modal" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                     Выгрузка в 1С
                 </button>
@@ -129,7 +129,7 @@
 <!-- Bell notification button (desktop, fixed top-right) -->
 <div class="hidden md:block fixed top-4 right-4 z-40">
 <div class="relative">
-<button class="relative p-2.5 bg-white text-gray-500 hover:text-gray-800 shadow-sm border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors" id="bell-btn">
+<button class="relative p-2.5 bg-white text-gray-500 hover:text-gray-800 shadow-sm border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors" data-act="toggle:desktop-bell-dropdown" id="bell-btn">
 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
@@ -139,7 +139,7 @@
 <div class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-[100] overflow-hidden" id="desktop-bell-dropdown">
 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
 <p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Уведомления</p>
-<button class="text-gray-400 hover:text-gray-600">
+<button class="text-gray-400 hover:text-gray-600" data-act="toggle:desktop-bell-dropdown">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
@@ -153,7 +153,7 @@
 <!-- Header -->
 <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
 <h1 class="text-xl font-bold text-gray-900">Пользователи</h1>
-<button class="inline-flex items-center gap-2 px-3.5 py-2 bg-gray-900 text-white rounded-xl text-sm font-semibold hover:bg-black transition-colors">
+<button class="inline-flex items-center gap-2 px-3.5 py-2 bg-gray-900 text-white rounded-xl text-sm font-semibold hover:bg-black transition-colors" data-act="note:Это макет: окно редактирования в макете не открывается">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
             Новый пользователь
         </button>
@@ -167,7 +167,7 @@
 <option value="staff">Сотрудник</option>
 <option value="client">Клиент</option>
 </select>
-<button class="px-3 py-2 text-sm text-gray-700 rounded-xl hover:bg-gray-100 transition-colors">
+<button class="px-3 py-2 text-sm text-gray-700 rounded-xl hover:bg-gray-100 transition-colors" data-act="clear-filters">
             Сбросить
         </button>
 </div>
@@ -185,9 +185,6 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="admin@demo.local" data-ids="" data-name="демо администратор" data-role="admin">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                Д
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">Демо Администратор</p>
 <p class="text-xs text-gray-500">admin@demo.local</p>
@@ -199,7 +196,7 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
 </div>
@@ -208,9 +205,6 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="anna@demo.local" data-ids="" data-name="анна смирнова" data-role="staff">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                А
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">Анна Смирнова</p>
 <p class="text-xs text-gray-500">anna@demo.local</p>
@@ -222,13 +216,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-500 hover:text-red-700 hover:bg-red-50">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-500 hover:text-red-700 hover:bg-red-50" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Удалить
                             </button>
 </div>
@@ -237,9 +231,6 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="igor@demo.local" data-ids="" data-name="игорь лебедев" data-role="staff">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                И
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">Игорь Лебедев</p>
 <p class="text-xs text-gray-500">igor@demo.local</p>
@@ -251,13 +242,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-500 hover:text-red-700 hover:bg-red-50">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-500 hover:text-red-700 hover:bg-red-50" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Удалить
                             </button>
 </div>
@@ -266,9 +257,6 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="olga@demo.local" data-ids="" data-name="ольга воронина" data-role="staff">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                О
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">Ольга Воронина</p>
 <p class="text-xs text-gray-500">olga@demo.local</p>
@@ -280,13 +268,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-500 hover:text-red-700 hover:bg-red-50">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-500 hover:text-red-700 hover:bg-red-50" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Удалить
                             </button>
 </div>
@@ -295,9 +283,6 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="dmitry@demo.local" data-ids="" data-name="дмитрий орлов" data-role="staff">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                Д
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">Дмитрий Орлов</p>
 <p class="text-xs text-gray-500">dmitry@demo.local</p>
@@ -309,13 +294,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-500 hover:text-red-700 hover:bg-red-50">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-500 hover:text-red-700 hover:bg-red-50" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Удалить
                             </button>
 </div>
@@ -324,13 +309,10 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="client@demo.local" data-ids="5100231" data-name="ооо автодеталь-плюс" data-role="client">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                О
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">ООО Автодеталь-Плюс</p>
 <p class="text-xs text-gray-500">client@demo.local</p>
-<p class="text-[11px] text-gray-600">
+<p class="text-[11px] text-blue-700">
                                     Менеджер: Анна Смирнова
                                 </p>
 </div>
@@ -341,13 +323,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100" data-act="note:Это макет: письмо с паролем не отправляется">
                                 Выслать пароль
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
 </div>
@@ -356,13 +338,10 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="kuznetsov@demo.local" data-ids="5100418" data-name="ип кузнецов а.в." data-role="client">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                И
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">ИП Кузнецов А.В.</p>
 <p class="text-xs text-gray-500">kuznetsov@demo.local</p>
-<p class="text-[11px] text-gray-600">
+<p class="text-[11px] text-blue-700">
                                     Менеджер: Игорь Лебедев
                                 </p>
 </div>
@@ -373,13 +352,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100" data-act="note:Это макет: письмо с паролем не отправляется">
                                 Выслать пароль
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
 </div>
@@ -388,13 +367,10 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="motor@demo.local" data-ids="5100592" data-name="ооо мотор сервис" data-role="client">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                О
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">ООО Мотор Сервис</p>
 <p class="text-xs text-gray-500">motor@demo.local</p>
-<p class="text-[11px] text-gray-600">
+<p class="text-[11px] text-blue-700">
                                     Менеджер: Ольга Воронина
                                 </p>
 </div>
@@ -405,13 +381,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100" data-act="note:Это макет: письмо с паролем не отправляется">
                                 Выслать пароль
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
 </div>
@@ -420,13 +396,10 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="sever@demo.local" data-ids="5100677" data-name="ооо север авто" data-role="client">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                О
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">ООО Север Авто</p>
 <p class="text-xs text-gray-500">sever@demo.local</p>
-<p class="text-[11px] text-gray-600">
+<p class="text-[11px] text-blue-700">
                                     Менеджер: Дмитрий Орлов
                                 </p>
 </div>
@@ -437,13 +410,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100" data-act="note:Это макет: письмо с паролем не отправляется">
                                 Выслать пароль
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
 </div>
@@ -452,13 +425,10 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="zaharova@demo.local" data-ids="5100735" data-name="ип захарова е.н." data-role="client">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                И
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">ИП Захарова Е.Н.</p>
 <p class="text-xs text-gray-500">zaharova@demo.local</p>
-<p class="text-[11px] text-gray-600">
+<p class="text-[11px] text-blue-700">
                                     Менеджер: Анна Смирнова
                                 </p>
 </div>
@@ -469,13 +439,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100" data-act="note:Это макет: письмо с паролем не отправляется">
                                 Выслать пароль
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
 </div>
@@ -484,13 +454,10 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="vostok@demo.local" data-ids="5100810" data-name="ооо техцентр восток" data-role="client">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                О
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">ООО Техцентр Восток</p>
 <p class="text-xs text-gray-500">vostok@demo.local</p>
-<p class="text-[11px] text-gray-600">
+<p class="text-[11px] text-blue-700">
                                     Менеджер: Игорь Лебедев
                                 </p>
 </div>
@@ -501,13 +468,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100" data-act="note:Это макет: письмо с паролем не отправляется">
                                 Выслать пароль
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
 </div>
@@ -516,9 +483,6 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="drive@demo.local" data-ids="5100956" data-name="ооо драйв партс" data-role="client">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                О
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">ООО Драйв Партс</p>
 <p class="text-xs text-gray-500">drive@demo.local</p>
@@ -533,13 +497,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100" data-act="note:Это макет: письмо с паролем не отправляется">
                                 Выслать пароль
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
 </div>
@@ -548,13 +512,10 @@
 <tr class="user-row border-b border-gray-100 hover:bg-gray-50 transition-colors" data-email="belov@demo.local" data-ids="5101043" data-name="ип белов с.и." data-role="client">
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-3">
-<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
-                                И
-                            </div>
 <div>
 <p class="font-semibold text-sm text-gray-900">ИП Белов С.И.</p>
 <p class="text-xs text-gray-500">belov@demo.local</p>
-<p class="text-[11px] text-gray-600">
+<p class="text-[11px] text-blue-700">
                                     Менеджер: Дмитрий Орлов
                                 </p>
 </div>
@@ -565,13 +526,13 @@
 </td>
 <td class="px-4 py-2.5">
 <div class="flex items-center gap-1.5 flex-wrap">
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="note:Это макет: окно редактирования в макете не открывается">
                                 Изменить
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-indigo-700 bg-indigo-50 hover:bg-indigo-100" data-act="note:Это макет: письмо с паролем не отправляется">
                                 Выслать пароль
                             </button>
-<button class="px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">
+<button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100" data-act="note:Это макет: здесь ничего не удаляется и не отключается">
                                 Деактивировать
                             </button>
 </div>
@@ -592,21 +553,21 @@
 </main>
 </div>
 <!-- Export to 1C modal -->
-<div class="fixed inset-0 bg-black/40 z-[70] hidden items-center justify-center p-4" id="export-1c-modal">
+<div class="fixed inset-0 bg-black/40 z-[70] hidden items-center justify-center p-4" data-close-self="close:export-1c-modal" id="export-1c-modal">
 <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
 <div class="flex items-center justify-between mb-2">
 <h2 class="text-lg font-bold text-gray-900">Выгрузка в 1С</h2>
-<button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+<button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close:export-1c-modal">
 <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
 <p class="text-xs text-gray-400 mb-6" id="export-1c-subtitle">Выберите способ выгрузки данных о возвратах.</p>
 <div class="space-y-3">
-<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-gray-100 transition-colors text-left" type="button">
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-gray-100 transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" type="button">
 <svg class="w-5 h-5 text-gray-600 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span class="text-sm font-semibold text-gray-800">Скачать файлом</span>
 </button>
-<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-900 text-white rounded-2xl hover:bg-black transition-colors text-left" id="export-1c-ftp-btn" type="button">
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-900 text-white rounded-2xl hover:bg-black transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" id="export-1c-ftp-btn" type="button">
 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span class="text-sm font-semibold">Отправить по FTP</span>
 </button>

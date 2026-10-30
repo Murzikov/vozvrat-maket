@@ -3,7 +3,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Создать запрос – Система управления возвратами</title>
-<link href="static/css/tailwind.css?v=94cbc601d469" rel="stylesheet"/>
+<link href="static/css/tailwind.css?v=9c5ca75dbb8d" rel="stylesheet"/>
 
 <link href="static/css/fonts.css?v=46ceeff3d4ce" rel="stylesheet"/>
 <link href="static/css/custom.css?v=6f215958dc77" rel="stylesheet"/>
@@ -21,7 +21,7 @@
 <div class="flex items-center gap-2">
 <!-- Mobile bell icon -->
 <div class="relative">
-<button class="relative p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-colors" id="mobile-bell-btn">
+<button class="relative p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-colors" data-act="toggle:mobile-bell-dropdown" id="mobile-bell-btn">
 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span class="" id="mobile-bell-badge-wrap"><span id="bell-badge"></span></span>
 </button>
@@ -29,7 +29,7 @@
 <div class="hidden absolute right-0 top-full mt-1 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 z-[100] overflow-hidden" id="mobile-bell-dropdown">
 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
 <p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Уведомления</p>
-<button class="text-gray-400 hover:text-gray-600">
+<button class="text-gray-400 hover:text-gray-600" data-act="toggle:mobile-bell-dropdown">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
@@ -88,7 +88,7 @@
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h18M3 14h18m-9-4v10M5 4h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                     Работа с таблицами
                 </a>
-<button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors text-left" type="button">
+<button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors text-left" data-act="open:export-1c-modal" type="button">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
                     Выгрузка в 1С
                 </button>
@@ -129,7 +129,7 @@
 <!-- Bell notification button (desktop, fixed top-right) -->
 <div class="hidden md:block fixed top-4 right-4 z-40">
 <div class="relative">
-<button class="relative p-2.5 bg-white text-gray-500 hover:text-gray-800 shadow-sm border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors" id="bell-btn">
+<button class="relative p-2.5 bg-white text-gray-500 hover:text-gray-800 shadow-sm border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors" data-act="toggle:desktop-bell-dropdown" id="bell-btn">
 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
@@ -139,7 +139,7 @@
 <div class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-[100] overflow-hidden" id="desktop-bell-dropdown">
 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
 <p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Уведомления</p>
-<button class="text-gray-400 hover:text-gray-600">
+<button class="text-gray-400 hover:text-gray-600" data-act="toggle:desktop-bell-dropdown">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
@@ -162,7 +162,7 @@
 <div class="max-w-3xl">
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
 <form enctype="multipart/form-data" id="create-form" method="post">
-<input name="creation_key" type="hidden" value="8436e133-751e-471c-a618-b95440b3197d"/>
+<input name="creation_key" type="hidden" value="c29b6f73-4497-49cf-a29e-86c02776848e"/>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 <!-- Тема -->
 <div>
@@ -223,12 +223,12 @@
 <!-- Article -->
 <div>
 <label class="block text-sm font-medium text-gray-700 mb-1">Артикул</label>
-<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-black focus:outline-none text-sm mono" name="article" type="text"/>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-black focus:outline-none text-sm mono" name="article" placeholder="BOSCH-199-22" type="text"/>
 </div>
 <!-- Brand -->
 <div>
 <label class="block text-sm font-medium text-gray-700 mb-1">Марка</label>
-<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-black focus:outline-none text-sm" maxlength="255" name="brand" type="text"/>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-black focus:outline-none text-sm" maxlength="255" name="brand" placeholder="Bosch, Samsung..." type="text"/>
 </div>
 <!-- Reason -->
 <div class="md:col-span-2">
@@ -264,21 +264,21 @@
 </main>
 </div>
 <!-- Export to 1C modal -->
-<div class="fixed inset-0 bg-black/40 z-[70] hidden items-center justify-center p-4" id="export-1c-modal">
+<div class="fixed inset-0 bg-black/40 z-[70] hidden items-center justify-center p-4" data-close-self="close:export-1c-modal" id="export-1c-modal">
 <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
 <div class="flex items-center justify-between mb-2">
 <h2 class="text-lg font-bold text-gray-900">Выгрузка в 1С</h2>
-<button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+<button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close:export-1c-modal">
 <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
 <p class="text-xs text-gray-400 mb-6" id="export-1c-subtitle">Выберите способ выгрузки данных о возвратах.</p>
 <div class="space-y-3">
-<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-gray-100 transition-colors text-left" type="button">
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-gray-100 transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" type="button">
 <svg class="w-5 h-5 text-gray-600 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span class="text-sm font-semibold text-gray-800">Скачать файлом</span>
 </button>
-<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-900 text-white rounded-2xl hover:bg-black transition-colors text-left" id="export-1c-ftp-btn" type="button">
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-900 text-white rounded-2xl hover:bg-black transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" id="export-1c-ftp-btn" type="button">
 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span class="text-sm font-semibold">Отправить по FTP</span>
 </button>
