@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html class="h-full" lang="ru"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Запросы – Система управления возвратами</title>
+<link href="static/css/tailwind.css?v=9c5ca75dbb8d" rel="stylesheet"/>
+
+<link href="static/css/fonts.css?v=46ceeff3d4ce" rel="stylesheet"/>
+<link href="static/css/custom.css?v=6f215958dc77" rel="stylesheet"/>
+
+<style>                      .htmx-indicator{opacity:0}                      .htmx-request .htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                      .htmx-request.htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                    </style><link href="data:," rel="icon"/></head>
+<body class="h-full bg-gray-50 flex flex-col" data-card-can-edit="true">
+<!-- Mobile Header -->
+<div class="md:hidden w-full bg-white border-b border-gray-200 p-4 flex justify-between items-center z-50 sticky top-0" id="mobile-header">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 bg-black rounded-lg flex items-center justify-center">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="font-bold text-lg tracking-tight">VOZVRAT</span>
+</div>
+<div class="flex items-center gap-2">
+<!-- Mobile bell icon -->
+<div class="relative">
+<button class="relative p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-colors" data-act="toggle:mobile-bell-dropdown" id="mobile-bell-btn">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="" id="mobile-bell-badge-wrap"><span id="bell-badge"></span></span>
+</button>
+<!-- Mobile bell dropdown -->
+<div class="hidden absolute right-0 top-full mt-1 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 z-[100] overflow-hidden" id="mobile-bell-dropdown">
+<div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+<p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Уведомления</p>
+<button class="text-gray-500 hover:text-gray-600" data-act="toggle:mobile-bell-dropdown">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="max-h-80 overflow-y-auto" id="mobile-bell-content">
+<div class="px-4 py-6 text-center text-sm text-gray-500">Загрузка...</div>
+</div>
+</div>
+</div>
+<button class="p-2 bg-gray-100 rounded-xl" data-maket-menu="">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 shadow-2xl md:shadow-none shrink-0 fixed md:static top-0 left-0 h-full z-40" id="main-sidebar">
+<div class="p-6 flex-1 overflow-y-auto">
+<div class="flex items-center gap-2 mb-8">
+<div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
+<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h1 class="font-bold text-xl tracking-tight text-gray-900">VOZVRAT</h1>
+</div>
+<nav class="space-y-1 text-sm font-medium">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors" href="statistics.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Статистика
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors" href="refunds.html">
+<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="flex-1">Возвраты</span>
+<span class="" id="nav-unread-badge-wrap"><span id="nav-unread-badge"></span></span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors" href="refunds-archive.html">
+<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="flex-1">Архив</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl bg-black text-white transition-colors" href="requests.html">
+<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 3v-3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="flex-1">Запросы</span>
+<span class="" id="nav-requests-badge-wrap"><span id="nav-requests-badge"></span></span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors" href="clients.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a3 3 0 10-2.5-1.35" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Клиенты
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors" href="suppliers.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Поставщики
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors" data-maket="Почта в макете не показана: она работает с настоящим ящиком" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Почта
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors" data-maket="Работа с таблицами в макете не показана: она работает с настоящим ftp" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h18M3 14h18m-9-4v10M5 4h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Работа с таблицами
+                </a>
+<button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors text-left" data-act="open:export-1c-modal" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Выгрузка в 1С
+                </button>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors" href="users.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Пользователи
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-600 hover:bg-gray-100 transition-colors" data-maket="Настройки в макете не показаны" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Настройки
+                </a>
+</nav>
+</div>
+<div class="p-4 border-t border-gray-100">
+<div class="flex items-center gap-3 p-2">
+<div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">
+                    Д
+                </div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-semibold text-gray-900 leading-snug break-words">Демо Администратор</p>
+<p class="text-[10px] text-gray-500 uppercase tracking-widest">
+                        Администратор
+                        
+                    </p>
+</div>
+<form data-maket-logout="" method="post">
+<button class="p-1 text-gray-500 hover:text-gray-700" title="Выйти" type="submit">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</form>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-gray-50 md:pr-12">
+<!-- Toast notifications -->
+<div class="fixed top-4 right-4 z-50 space-y-2" id="toast-container"></div>
+<!-- Bell notification button (desktop, fixed top-right) -->
+<div class="hidden md:block fixed top-4 right-4 z-40">
+<div class="relative">
+<button class="relative p-2.5 bg-white text-gray-500 hover:text-gray-800 shadow-sm border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors" data-act="toggle:desktop-bell-dropdown" id="bell-btn">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="" id="bell-badge-wrap"><span id="bell-badge"></span></span>
+</button>
+<!-- Desktop bell dropdown -->
+<div class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-[100] overflow-hidden" id="desktop-bell-dropdown">
+<div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+<p class="text-xs font-bold text-gray-700 uppercase tracking-widest">Уведомления</p>
+<button class="text-gray-500 hover:text-gray-600" data-act="toggle:desktop-bell-dropdown">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="max-h-96 overflow-y-auto" id="desktop-bell-content">
+<div class="px-4 py-6 text-center text-sm text-gray-500">Нажмите на колокольчик</div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 md:p-6">
+<!-- Шапка -->
+<div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+<h1 class="text-xl font-bold text-gray-900">Запросы</h1>
+<a class="inline-flex items-center gap-2 px-3.5 py-2 bg-gray-900 text-white rounded-xl text-sm font-semibold hover:bg-black transition-colors" href="requests-create.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Создать запрос
+        </a>
+</div>
+<!-- Фильтры одной строкой -->
+<div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 mb-3">
+<div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-2">
+<input aria-label="Клиент" class="w-full min-w-0 bg-gray-50 rounded-xl px-3 py-2 text-sm text-gray-900 ring-1 ring-gray-200 focus:ring-2 focus:ring-black focus:outline-none" name="client_name" placeholder="Клиент" type="text" value=""/>
+<input aria-label="Артикул" class="w-full min-w-0 bg-gray-50 rounded-xl px-3 py-2 text-sm text-gray-900 ring-1 ring-gray-200 focus:ring-2 focus:ring-black focus:outline-none" name="article" placeholder="Артикул" type="text" value=""/>
+<input aria-label="ID заказа" class="w-full min-w-0 bg-gray-50 rounded-xl px-3 py-2 text-sm text-gray-900 ring-1 ring-gray-200 focus:ring-2 focus:ring-black focus:outline-none" maxlength="100" name="order_id" placeholder="ID заказа" type="text" value=""/>
+<select aria-label="Статус" class="w-full min-w-0 bg-gray-50 rounded-xl px-3 py-2 text-sm text-gray-900 ring-1 ring-gray-200 focus:ring-2 focus:ring-black focus:outline-none" name="status">
+<option value="">Статус</option>
+<option selected="" value="received">Получен</option>
+<option value="in_work">В работе</option>
+<option value="completed">Завершён</option>
+<option value="archive">Архив</option>
+</select>
+<select aria-label="Исполнитель" class="w-full min-w-0 bg-gray-50 rounded-xl px-3 py-2 text-sm text-gray-900 ring-1 ring-gray-200 focus:ring-2 focus:ring-black focus:outline-none" name="executor_id">
+<option value="">Исполнитель</option>
+<option value="2">Анна Смирнова</option>
+<option value="1">Демо Администратор</option>
+<option value="5">Дмитрий Орлов</option>
+<option value="3">Игорь Лебедев</option>
+<option value="4">Ольга Воронина</option>
+</select>
+<select aria-label="Менеджер клиента" class="w-full min-w-0 bg-gray-50 rounded-xl px-3 py-2 text-sm text-gray-900 ring-1 ring-gray-200 focus:ring-2 focus:ring-black focus:outline-none" name="manager_id">
+<option value="">Менеджер</option>
+<option value="2">Анна Смирнова</option><option value="1">Демо Администратор</option><option value="5">Дмитрий Орлов</option><option value="3">Игорь Лебедев</option><option value="4">Ольга Воронина</option>
+</select>
+<input aria-label="Дата создания" class="w-full min-w-0 bg-gray-50 rounded-xl px-3 py-2 text-sm text-gray-900 ring-1 ring-gray-200 focus:ring-2 focus:ring-black focus:outline-none" name="date" title="Дата создания" type="date" value=""/>
+</div>
+</div>
+<!-- Таблица -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+<div class="overflow-x-auto table-container" id="requests-results">
+<table class="w-full">
+<thead>
+<tr class="bg-gray-50 border-b border-gray-100">
+<th class="text-left px-4 py-2.5 text-[11px] uppercase font-semibold text-gray-500 tracking-wider">ID / Дата</th>
+<th class="text-left px-4 py-2.5 text-[11px] uppercase font-semibold text-gray-500 tracking-wider">Клиент / Тема</th>
+<th class="text-left px-4 py-2.5 text-[11px] uppercase font-semibold text-gray-500 tracking-wider">Артикул</th>
+<th class="text-left px-4 py-2.5 text-[11px] uppercase font-semibold text-gray-500 tracking-wider">Исполнитель</th>
+<th class="text-left px-4 py-2.5 text-[11px] uppercase font-semibold text-gray-500 tracking-wider">Статус</th>
+<th class="text-left px-4 py-2.5 text-[11px] uppercase font-semibold text-gray-500 tracking-wider"></th>
+</tr>
+</thead>
+<tbody id="requests-tbody">
+<tr class="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors" data-href="requests-1.html">
+<td class="px-4 py-2.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div>
+<p class="font-bold text-gray-900 mono text-sm leading-5">Z-30010</p>
+<p class="text-xs text-gray-500 leading-4">29.10.2026</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-2.5">
+<p class="font-medium text-gray-900 text-sm leading-5">ИП Кузнецов А.В.</p>
+<p class="text-xs text-gray-500 leading-4">Срок поставки</p>
+</td>
+<td class="px-4 py-2.5">
+<p class="font-medium text-gray-900 text-sm mono leading-5">HL5520R</p>
+</td>
+<td class="px-4 py-2.5">
+<p class="text-xs text-gray-500">Не назначен</p>
+</td>
+<td class="px-4 py-2.5 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Получен</span>
+</td>
+<td class="px-4 py-2.5 text-right">
+<a aria-label="Открыть запрос Z-30010" class="inline-flex w-8 h-8 items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors" href="requests-1.html" title="Открыть запрос Z-30010">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</td>
+</tr>
+<tr class="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors" data-href="requests-5.html">
+<td class="px-4 py-2.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div>
+<p class="font-bold text-gray-900 mono text-sm leading-5">Z-30006</p>
+<p class="text-xs text-gray-500 leading-4">24.10.2026</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-2.5">
+<p class="font-medium text-gray-900 text-sm leading-5">ООО Техцентр Восток</p>
+<p class="text-xs text-gray-500 leading-4">Отказ</p>
+</td>
+<td class="px-4 py-2.5">
+<p class="font-medium text-gray-900 text-sm mono leading-5">CF4410</p>
+</td>
+<td class="px-4 py-2.5">
+<p class="text-xs text-gray-500">Не назначен</p>
+</td>
+<td class="px-4 py-2.5 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Получен</span>
+</td>
+<td class="px-4 py-2.5 text-right">
+<a aria-label="Открыть запрос Z-30006" class="inline-flex w-8 h-8 items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors" href="requests-5.html" title="Открыть запрос Z-30006">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</td>
+</tr>
+<tr class="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors" data-href="requests-8.html">
+<td class="px-4 py-2.5 whitespace-nowrap">
+<div class="flex items-center gap-2">
+<div>
+<p class="font-bold text-gray-900 mono text-sm leading-5">Z-30003</p>
+<p class="text-xs text-gray-500 leading-4">20.10.2026</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-2.5">
+<p class="font-medium text-gray-900 text-sm leading-5">ООО Автодеталь-Плюс</p>
+<p class="text-xs text-gray-500 leading-4">Подбор колодок</p>
+</td>
+<td class="px-4 py-2.5">
+<p class="font-medium text-gray-900 text-sm mono leading-5">TB4418GT</p>
+</td>
+<td class="px-4 py-2.5">
+<p class="text-gray-900 text-sm">Дмитрий Орлов</p>
+</td>
+<td class="px-4 py-2.5 whitespace-nowrap">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Получен</span>
+</td>
+<td class="px-4 py-2.5 text-right">
+<a aria-label="Открыть запрос Z-30003" class="inline-flex w-8 h-8 items-center justify-center rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors" href="requests-8.html" title="Открыть запрос Z-30003">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="htmx-indicator p-3 text-center text-sm text-gray-500" id="table-spinner">Загрузка...</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Export to 1C modal -->
+<div class="fixed inset-0 bg-black/40 z-[70] hidden items-center justify-center p-4" data-close-self="close:export-1c-modal" id="export-1c-modal">
+<div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-lg font-bold text-gray-900">Выгрузка в 1С</h2>
+<button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close:export-1c-modal">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<p class="text-xs text-gray-500 mb-6" id="export-1c-subtitle">Выберите способ выгрузки данных о возвратах.</p>
+<div class="space-y-3">
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-gray-100 transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" type="button">
+<svg class="w-5 h-5 text-gray-600 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-sm font-semibold text-gray-800">Скачать файлом</span>
+</button>
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-900 text-white rounded-2xl hover:bg-black transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" id="export-1c-ftp-btn" type="button">
+<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-sm font-semibold">Отправить по FTP</span>
+</button>
+</div>
+</div>
+</div>
+
+<script src="maket.js?v=1e6c05ef9c49"></script></body></html>

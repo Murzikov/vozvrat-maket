@@ -55,7 +55,7 @@
         ['Согласован', 'bg-green-100 text-green-700', 'bg-green-50 text-green-700 hover:bg-green-100'],
         ['Отказано', 'bg-red-100 text-red-700', 'bg-red-50 text-red-700 hover:bg-red-100'],
         ['Ожидаем деталь', 'bg-amber-100 text-amber-700', 'bg-amber-50 text-amber-800 hover:bg-amber-100'],
-        ['Архив', 'bg-gray-100 text-gray-500', 'bg-gray-900 text-white hover:bg-black', 'В архив']
+        ['Архив', 'bg-gray-100 text-gray-600', 'bg-gray-900 text-white hover:bg-black', 'В архив']
     ];
     function setStatus(section, label) {
         var spans = $$('span', section);
@@ -87,8 +87,8 @@
         if (!list) { box.innerHTML = ''; list = el('<div class="space-y-3"></div>'); box.appendChild(list); }
         list.appendChild(el('<div class="chat-item flex flex-col items-end" data-search="' + esc((text + ' ' + ME).toLowerCase()) + '">' +
             '<div class="bg-black text-white rounded-2xl px-3.5 py-2.5 max-w-[85%]"><p class="text-xs leading-relaxed whitespace-pre-wrap break-words">' + esc(text) + '</p></div>' +
-            '<div class="flex items-center gap-1.5 mt-1 px-1"><span class="text-[10px] text-gray-400">' + esc(ME) + '</span>' +
-            '<span class="text-[10px] text-gray-300">·</span><span class="text-[10px] text-gray-400">' + now() + '</span></div></div>'));
+            '<div class="flex items-center gap-1.5 mt-1 px-1"><span class="text-[10px] text-gray-500">' + esc(ME) + '</span>' +
+            '<span class="text-[10px] text-gray-300">·</span><span class="text-[10px] text-gray-500">' + now() + '</span></div></div>'));
         box.scrollTop = box.scrollHeight;
     }
     function addComment(text) {
@@ -98,8 +98,8 @@
         if (!list) { box.innerHTML = ''; list = el('<div class="space-y-2"></div>'); box.appendChild(list); }
         list.appendChild(el('<div class="comment-item flex flex-col items-end" data-search="' + esc((text + ' ' + ME).toLowerCase()) + '">' +
             '<div class="bg-amber-50 text-gray-800 rounded-xl px-3 py-2 max-w-[95%]"><p class="text-xs leading-relaxed whitespace-pre-wrap break-words">' + esc(text) + '</p></div>' +
-            '<div class="flex items-center gap-1.5 mt-0.5 px-1"><span class="text-[10px] text-gray-400">' + esc(ME) + '</span>' +
-            '<span class="text-[10px] text-gray-300">·</span><span class="text-[10px] text-gray-400">' + now() + '</span></div></div>'));
+            '<div class="flex items-center gap-1.5 mt-0.5 px-1"><span class="text-[10px] text-gray-500">' + esc(ME) + '</span>' +
+            '<span class="text-[10px] text-gray-300">·</span><span class="text-[10px] text-gray-500">' + now() + '</span></div></div>'));
         box.scrollTop = box.scrollHeight;
     }
     function searchIn(boxSel, itemSel, query, emptyId) {
@@ -208,7 +208,13 @@
         if (t.hasAttribute('data-close-self')) { t.classList.add('hidden'); t.classList.remove('flex'); return; }
         var photo = t.closest('[data-preview]');
         if (photo) { e.preventDefault(); openPhoto(photo.getAttribute('data-preview')); return; }
-        if (t.closest('[data-maket-menu]')) { show($('#main-sidebar'), $('#main-sidebar').classList.contains('hidden')); return; }
+        if (t.closest('[data-maket-menu]')) {
+            var opening = sidebar.classList.contains('hidden');
+            show(sidebar, opening);
+            // На телефоне открытое меню во весь рост, плашка иначе легла бы на кнопку выхода.
+            if (!wide.matches) bar.style.display = opening ? 'none' : 'flex';
+            return;
+        }
         var note = t.closest('[data-maket]');
         if (note) { e.preventDefault(); toast(note.getAttribute('data-maket')); return; }
         var row = t.closest('tr[data-href]');
@@ -330,8 +336,10 @@
         }
         if (t.name === 'subject') { show($('#subject-text-wrap'), t.value === 'free'); return; }
         if (t.closest('#refunds-tbody') || t.closest('#requests-tbody')) return;
-        if (PAGE.indexOf('refunds') === 0 && t.name === 'status') {
-            location.href = t.value ? 'refunds-status-' + t.value + '.html' : 'refunds.html';
+        // Список по статусу снят отдельной страницей: завершённые и архивные запросы система показывает только так.
+        var section = PAGE.indexOf('refunds') === 0 ? 'refunds' : PAGE.indexOf('requests') === 0 ? 'requests' : '';
+        if (section && t.name === 'status') {
+            location.href = t.value ? section + '-status-' + t.value + '.html' : section + '.html';
             return;
         }
         if ($('#refunds-tbody') && t.name) {
@@ -361,12 +369,25 @@
     });
 
     // ---------- плашка макета и вход ----------
-    var bar = el('<div id="maket-bar" style="position:fixed;left:12px;bottom:12px;z-index:80;display:flex;gap:4px;align-items:center;padding:4px;' +
-        'border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.14);font:600 12px Inter,sans-serif;color:#374151">' +
-        '<span style="padding:6px 8px">Макет, данные выдуманные</span>' +
+    var bar = el('<div id="maket-bar"><span style="padding:6px 8px">Макет, данные выдуманные</span>' +
         '<a href="statistics.html" style="padding:6px 10px;border-radius:8px;text-decoration:none;' + (IS_CLIENT ? 'background:#f3f4f6;color:#111827' : 'background:#111827;color:#fff') + '">Сотрудник</a>' +
         '<a href="client-refunds.html" style="padding:6px 10px;border-radius:8px;text-decoration:none;' + (IS_CLIENT ? 'background:#111827;color:#fff' : 'background:#f3f4f6;color:#111827') + '">Клиент</a></div>');
-    document.body.appendChild(bar);
+    var BAR_LOOK = 'display:flex;gap:4px;align-items:center;padding:4px;border-radius:12px;font:600 12px Inter,sans-serif;color:#374151;';
+    var sidebar = $('#main-sidebar');
+    var wide = window.matchMedia('(min-width: 768px)');
+    // На компьютере плашка стоит в меню над блоком пользователя и ничего не закрывает, на телефоне висит внизу экрана.
+    function placeBar() {
+        var userBlock = sidebar && sidebar.lastElementChild;
+        if (wide.matches && userBlock) {
+            bar.style.cssText = BAR_LOOK + 'flex-wrap:wrap;margin:0 16px 12px;background:#f9fafb';
+            sidebar.insertBefore(bar, userBlock);
+        } else {
+            bar.style.cssText = BAR_LOOK + 'position:fixed;left:12px;bottom:12px;z-index:80;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.14)';
+            document.body.appendChild(bar);
+        }
+    }
+    placeBar();
+    if (wide.addEventListener) wide.addEventListener('change', placeBar);
     var main = $('main');
     if (main) main.style.paddingBottom = '64px';
 
