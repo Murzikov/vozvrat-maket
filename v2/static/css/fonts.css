@@ -1,0 +1,49 @@
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/3624e43c305a7777133f.woff2) format("woff2");
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../fonts/c7a2622ce6e66215bf0b.woff2) format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(../fonts/f6cd0214334795304872.woff2) format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/2486b3b2bbb0b716ddb8.woff2) format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../fonts/5d46c37999483827e86d.woff2) format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../fonts/b2d45f85f35a2798d59c.woff2) format("woff2");
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../fonts/696f7b445cd42b84d4be.woff2) format("woff2");
+}

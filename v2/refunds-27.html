@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html class="h-full" lang="ru"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Возврат #20102 – Система управления возвратами</title>
+<link href="static/css/tailwind.css?v=e17b3f6e1048" rel="stylesheet"/>
+
+<link href="static/css/fonts.css?v=46ceeff3d4ce" rel="stylesheet"/>
+<link href="static/css/custom.css?v=9c4c5d7af955" rel="stylesheet"/>
+
+<style>                      .htmx-indicator{opacity:0}                      .htmx-request .htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                      .htmx-request.htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                    </style><link href="data:," rel="icon"/></head>
+<body class="h-full bg-gray-100 flex flex-col" data-card-can-edit="true">
+<!-- Mobile Header -->
+<div class="md:hidden w-full bg-gray-900 text-white p-4 flex justify-between items-center z-50 sticky top-0" id="mobile-header">
+<div class="flex items-center gap-2">
+<img alt="" class="w-7 h-7" src="static/img/amx24-mark.png?v=53ecca95120a"/>
+<span class="font-bold text-lg tracking-tight">VOZVRAT</span>
+</div>
+<div class="flex items-center gap-2">
+<!-- Mobile bell icon -->
+<div class="relative">
+<button class="relative p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-colors" data-act="toggle:mobile-bell-dropdown" id="mobile-bell-btn">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="" id="mobile-bell-badge-wrap"><span id="bell-badge"></span></span>
+</button>
+<!-- Mobile bell dropdown -->
+<div class="hidden absolute right-0 top-full mt-1 w-72 bg-white rounded-2xl shadow-xl border border-gray-200 z-[100] overflow-hidden" id="mobile-bell-dropdown">
+<div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+<p class="text-sm font-semibold text-gray-900">Уведомления</p>
+<button class="text-gray-500 hover:text-gray-900" data-act="toggle:mobile-bell-dropdown">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="max-h-80 overflow-y-auto" id="mobile-bell-content">
+<div class="px-4 py-6 text-center text-sm text-gray-500">Загрузка...</div>
+</div>
+</div>
+</div>
+<button aria-label="Меню" class="p-2 bg-white/10 text-white rounded-xl" data-maket-menu="">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar: графит, как меню Основы -->
+<aside class="hidden md:flex flex-col w-64 bg-gray-900 text-gray-300 shadow-2xl md:shadow-none shrink-0 fixed md:static top-0 left-0 h-full z-40" id="main-sidebar">
+<div class="p-6 flex-1 overflow-y-auto">
+<div class="flex items-center gap-2.5 mb-8">
+<img alt="" class="w-8 h-8" src="static/img/amx24-mark.png?v=53ecca95120a"/>
+<h1 class="font-bold text-xl tracking-tight text-white">VOZVRAT</h1>
+</div>
+<nav class="space-y-1 text-sm font-medium">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors" href="statistics.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Статистика
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl bg-brand-500 text-gray-900 font-semibold transition-colors" href="refunds.html">
+<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="flex-1">Возвраты</span>
+<span class="" id="nav-unread-badge-wrap"><span id="nav-unread-badge"></span></span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors" href="refunds-archive.html">
+<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="flex-1">Архив</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors" href="requests.html">
+<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 3v-3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="flex-1">Запросы</span>
+<span class="" id="nav-requests-badge-wrap"><span id="nav-requests-badge"></span></span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors" href="clients.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a3 3 0 10-2.5-1.35" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Клиенты
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors" href="suppliers.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Поставщики
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors" data-maket="Почта в макете не показана: она работает с настоящим ящиком" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Почта
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors" data-maket="Работа с таблицами в макете не показана: она работает с настоящим ftp" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h18M3 14h18m-9-4v10M5 4h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Работа с таблицами
+                </a>
+<button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors text-left" data-act="open:export-1c-modal" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Выгрузка в 1С
+                </button>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors" href="users.html">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Пользователи
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors" data-maket="Настройки в макете не показаны" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Настройки
+                </a>
+</nav>
+</div>
+<div class="p-4 border-t border-white/10">
+<div class="flex items-center gap-3 p-2">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-gray-200">
+                    Д
+                </div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-semibold text-white leading-snug break-words">Демо Администратор</p>
+<p class="text-[11px] text-gray-400">
+                        Администратор
+                        
+                    </p>
+</div>
+<form data-maket-logout="" method="post">
+<button aria-label="Выйти" class="p-1 text-gray-400 hover:text-white" title="Выйти" type="submit">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</form>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-gray-100 md:pr-12">
+<!-- Toast notifications -->
+<div class="fixed top-4 right-4 z-50 space-y-2" id="toast-container"></div>
+<!-- Bell notification button (desktop, fixed top-right) -->
+<div class="hidden md:block fixed top-4 right-4 z-40">
+<div class="relative">
+<button class="relative p-2.5 bg-white text-gray-500 hover:text-gray-800 shadow-sm border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors" data-act="toggle:desktop-bell-dropdown" id="bell-btn">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="" id="bell-badge-wrap"><span id="bell-badge"></span></span>
+</button>
+<!-- Desktop bell dropdown -->
+<div class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-200 z-[100] overflow-hidden" id="desktop-bell-dropdown">
+<div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+<p class="text-sm font-semibold text-gray-900">Уведомления</p>
+<button class="text-gray-500 hover:text-gray-900" data-act="toggle:desktop-bell-dropdown">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="max-h-96 overflow-y-auto" id="desktop-bell-content">
+<div class="px-4 py-6 text-center text-sm text-gray-500">Нажмите на колокольчик</div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 md:p-6">
+<!-- Шапка: номер, статус, действия -->
+<div class="flex flex-wrap items-start gap-3 mb-4">
+<a aria-label="К списку возвратов" class="w-9 h-9 flex items-center justify-center bg-white rounded-full border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors shrink-0" href="refunds.html" title="К списку возвратов">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<div class="flex-1 min-w-[14rem]">
+<div class="flex items-center gap-2 flex-wrap">
+<h1 class="text-xl font-bold text-gray-900 mono">Возврат #20102</h1>
+</div>
+<p class="text-xs text-gray-500 mt-0.5">
+                Из почты
+                · 11.10.2026 07:12 · Анна Смирнова
+            </p>
+</div>
+<div class="flex items-center gap-2 flex-wrap w-full xl:w-auto pl-12 xl:pl-0 xl:justify-end">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition-colors" data-act="note:Это макет: письмо поставщику не отправляется">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Письмо поставщику
+            </button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-gray-800 bg-white ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition-colors" data-act="open:export-1c-modal" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Выгрузить для 1С
+            </button>
+<button aria-label="Удалить возврат" class="flex items-center justify-center w-8 h-8 rounded-xl text-red-700 bg-red-50 hover:bg-red-100 transition-colors" data-act="note:Это макет: здесь ничего не удаляется и не отключается" title="Удалить возврат">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+<!-- Смена статуса одной строкой -->
+<div class="flex flex-wrap items-center gap-x-3 gap-y-2 bg-white rounded-2xl shadow-sm border border-gray-200 px-4 py-3" id="status-section">
+<span class="text-xs text-gray-500">Статус</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>Архив</span>
+<span class="hidden sm:block w-px h-5 bg-gray-200"></span>
+<span class="text-xs text-gray-500">Сменить на</span>
+<div class="flex flex-wrap items-center gap-2">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors bg-green-700 text-white hover:bg-green-800">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path></svg>
+            Согласован
+        </button>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors bg-amber-400 text-gray-900 hover:bg-amber-300">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path></svg>
+            Ожидаем деталь
+        </button>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors bg-white text-blue-800 ring-1 ring-inset ring-blue-200 hover:bg-blue-50">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path></svg>
+            Получен
+        </button>
+</div>
+<div class="flex flex-wrap items-center gap-2 sm:ml-auto">
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-colors bg-red-600 text-white hover:bg-red-700">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path></svg>
+            Отказано
+        </button>
+</div>
+</div>
+<div class="flex flex-col gap-4 mt-4 xl:grid xl:grid-cols-[minmax(0,1fr)_26rem] 2xl:grid-cols-[minmax(0,1fr)_28rem] xl:items-start">
+<div class="contents xl:block xl:space-y-4">
+<div class="order-1 grid gap-4 lg:grid-cols-2 xl:grid-cols-1 min-[1400px]:grid-cols-2">
+<!-- Товар -->
+<section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
+<h2 class="text-sm font-semibold text-gray-900 mb-3">Товар</h2>
+<div class="">
+<div class="flex items-baseline justify-between gap-3">
+<span class="text-base font-bold mono text-gray-900 break-all">SP9921</span>
+<span class="text-base font-bold text-gray-900 whitespace-nowrap">980.00 ₽</span>
+</div>
+<dl class="mt-1.5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-xs">
+<dt class="text-gray-500">Производитель</dt><dd class="text-gray-900 text-right">NGK</dd>
+<dt class="text-gray-500">Количество</dt><dd class="text-gray-900 text-right">3 шт.</dd>
+<dt class="text-gray-500">ID позиции</dt><dd class="text-gray-900 text-right mono">794100338</dd>
+</dl>
+</div>
+</section>
+<!-- Клиент -->
+<section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
+<h2 class="text-sm font-semibold text-gray-900 mb-3">Клиент</h2>
+<p class="text-base font-bold text-gray-900 break-words">
+                        ООО Мотор Сервис
+                    </p>
+<dl class="mt-1.5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-xs">
+<dt class="text-gray-500">ID клиента</dt>
+<dd class="flex flex-col items-end gap-1">
+<div class="flex flex-wrap gap-1 justify-end" data-expanded="false" id="card-cids">
+<span class="card-cid px-2 py-0.5 bg-blue-50 text-blue-800 rounded-lg mono text-[11px]">5100592</span>
+</div>
+</dd>
+<dt class="text-gray-500">ID заказа</dt><dd class="text-gray-900 text-right mono">281590086</dd>
+<dt class="text-gray-500">Письмо от</dt><dd class="text-gray-900 text-right truncate" title="robot@shop.demo">robot@shop.demo</dd>
+</dl>
+</section>
+</div>
+<!-- Причина возврата: по ней и по фото принимают решение -->
+<section class="order-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-sm font-semibold text-gray-900">Причина возврата</h2>
+<button class="text-xs text-gray-600 hover:text-gray-900 font-semibold transition-colors" data-act="reason-toggle" id="reason-edit-btn" type="button">Изменить</button>
+</div>
+<div id="reason-display">
+<p class="text-sm text-gray-900 whitespace-pre-line">Не подошла по VIN</p>
+</div>
+<div class="hidden mt-2" id="reason-edit-form">
+<textarea class="w-full bg-gray-50 rounded-xl px-3 py-2 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-xs resize-none" id="reason-textarea" placeholder="Укажите причину возврата..." rows="3">Не подошла по VIN</textarea>
+<div class="flex gap-2 mt-2">
+<button class="px-3 py-1.5 bg-gray-900 text-white text-xs font-semibold rounded-xl hover:bg-black transition-colors" data-act="reason-save" type="button">Сохранить</button>
+<button class="px-3 py-1.5 bg-gray-100 text-gray-800 text-xs font-semibold rounded-xl hover:bg-gray-200 transition-colors" data-act="reason-toggle" type="button">Отмена</button>
+</div>
+</div>
+</section>
+<!-- Поставщик и документы -->
+<section class="order-5 bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
+<h2 class="text-sm font-semibold text-gray-900 mb-3">Поставщик и документы</h2>
+<form class="flex gap-2 items-center" id="assign-supplier-form">
+<select aria-label="Поставщик" class="flex-1 min-w-0 bg-gray-50 rounded-xl px-3 py-1.5 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-xs" id="assign-supplier-select">
+<option value="">– Не выбран –</option>
+<option value="1">АвтоТрейд [online]</option>
+<option selected="" value="2">Деталь Опт</option>
+<option value="4">Мега Парт [online]</option>
+<option value="3">Север Запчасть</option>
+<option value="5">ТехноДеталь</option>
+</select>
+<button class="px-3 py-1.5 bg-white text-gray-900 text-xs font-semibold rounded-xl ring-1 ring-inset ring-gray-300 hover:bg-gray-100 transition-colors whitespace-nowrap" data-act="supplier-save" type="button">Сохранить</button>
+</form>
+<dl class="mt-3 pt-3 border-t border-gray-100 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-xs">
+<dt class="text-gray-500">Документ клиента</dt><dd class="text-gray-900 text-right mono">0000-046126</dd>
+<dt class="text-gray-500">Заказ клиента в 1С</dt><dd class="text-gray-900 text-right mono">0000-600200026</dd>
+</dl>
+</section>
+<!-- Только для сотрудников: комментарии, внутренние файлы, заметки. Жёлтая заметка, клиент этого не видит. -->
+<section class="order-6 scroll-mt-4 rounded-2xl border border-note-200 bg-note-50 p-4" id="comments">
+<div class="flex flex-wrap items-center gap-x-2 gap-y-1 mb-3">
+<svg class="w-4 h-4 text-note-700 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<h2 class="text-sm font-semibold text-note-800">Только для сотрудников</h2>
+<span class="text-xs text-note-700">клиент это не видит</span>
+</div>
+<div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_15rem] xl:grid-cols-1 min-[1400px]:grid-cols-[minmax(0,1fr)_15rem]">
+<!-- Комментарии сотрудников -->
+<div class="min-w-0">
+<div class="flex items-center gap-3 mb-2">
+<h3 class="text-[13px] font-semibold text-gray-900 flex-1">Комментарии сотрудников</h3>
+<div class="relative">
+<svg class="w-3.5 h-3.5 text-gray-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<input aria-label="Поиск по комментариям" class="w-32 focus:w-44 transition-[width] pl-8 pr-3 py-1.5 text-xs bg-white rounded-xl ring-1 ring-note-200 focus:outline-none focus:ring-2 focus:ring-note-300" id="comments-search" placeholder="Поиск" type="text"/>
+</div>
+</div>
+<div class="mb-3 min-h-[5rem] max-h-80 overflow-y-auto rounded-xl p-2 bg-white ring-1 ring-note-200" id="comments-list"><p class="text-xs text-gray-500 text-center py-4">Комментариев пока нет</p>
+</div>
+<p class="hidden text-xs text-gray-500 text-center py-2" id="comments-no-results">Ничего не найдено</p>
+<form id="comment-form">
+<div class="hidden flex flex-wrap gap-1.5 mb-2" id="comment-photo-previews"></div>
+<div class="relative">
+<textarea aria-label="Комментарий для сотрудников" autocomplete="off" class="block w-full bg-white rounded-xl px-3 py-2 text-sm ring-1 ring-note-200 focus:outline-none focus:ring-2 focus:ring-note-300 resize-none" id="comment-input" name="text" placeholder="Комментарий для сотрудников: + упомянуть, можно вставить фото" rows="2"></textarea>
+<div class="hidden absolute z-30 bottom-full mb-1 left-0 w-64 max-h-48 overflow-y-auto bg-white rounded-xl shadow-lg border border-gray-200" id="mention-dropdown"></div>
+</div>
+<div class="flex items-center justify-end gap-2 mt-2">
+<button aria-label="Прикрепить фото" class="flex items-center justify-center w-9 h-9 bg-white text-gray-700 rounded-xl ring-1 ring-note-200 hover:bg-note-100 transition-colors" data-act="pick:comment-photo-input" title="Прикрепить фото" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="flex items-center gap-1.5 px-4 py-2 bg-gray-900 text-white text-xs font-semibold rounded-xl hover:bg-black transition-colors whitespace-nowrap" type="submit">Добавить</button>
+</div>
+<input accept="image/*" class="hidden" id="comment-photo-input" multiple="" type="file"/>
+</form>
+<p class="hidden text-[11px] text-note-800 mt-1.5" id="mention-hint"></p>
+</div>
+<div class="space-y-4 min-w-0">
+<!-- Внутренние файлы -->
+<div>
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-[13px] font-semibold text-gray-900">Внутренние файлы</h3>
+<label class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-note-800 bg-white ring-1 ring-note-200 rounded-lg cursor-pointer hover:bg-note-100 transition-colors" title="Виден только сотрудникам · XLS, XLSX, PDF, JPG, PNG, WEBP">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                                    Добавить
+                                    <input accept=".xls,.xlsx,.pdf,.jpg,.jpeg,.png,.webp" class="hidden" data-internal="true" multiple="" name="file" type="file"/>
+</label>
+</div>
+<div class="attachment-container"><div class="attachment-list" id="internal-files-list">
+<p class="text-xs text-gray-500 text-center py-4 col-span-full">Внутренних файлов нет</p>
+</div></div>
+</div>
+<!-- Заметки -->
+<div>
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-[13px] font-semibold text-gray-900">Заметки</h3>
+<span class="text-[11px] text-gray-500" id="notes-status"></span>
+</div>
+<textarea aria-label="Заметки" class="w-full bg-white rounded-xl px-3 py-2 text-xs ring-1 ring-note-200 focus:outline-none focus:ring-2 focus:ring-note-300 resize-y" id="notes-input" placeholder="Добавить заметку..." rows="3"></textarea>
+<div class="flex justify-end mt-2">
+<button class="px-3 py-1.5 bg-white text-gray-900 text-xs font-semibold rounded-xl ring-1 ring-inset ring-note-200 hover:bg-note-100 transition-colors" data-act="notes-save" type="button">Сохранить</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Сторона клиента: чат и файлы, которые он видит -->
+<div class="contents xl:block xl:space-y-4">
+<section class="order-3 scroll-mt-4 bg-white rounded-2xl shadow-sm border border-gray-200 p-4 flex flex-col" id="chat">
+<div class="flex items-center gap-3 mb-3">
+<h2 class="text-sm font-semibold text-gray-900 flex-1">Чат с клиентом</h2>
+<div class="relative">
+<svg class="w-3.5 h-3.5 text-gray-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<input aria-label="Поиск по сообщениям" class="w-36 focus:w-48 pl-8 pr-3 py-1.5 text-xs bg-gray-50 rounded-xl ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-[width]" id="chat-search" placeholder="Поиск по чату" type="text"/>
+</div>
+</div>
+<div class="min-h-[6rem] max-h-[min(30rem,60vh)] overflow-y-auto space-y-1 mb-3 pr-1" id="chat-messages"><span data-chat-files-revision="" hidden=""></span>
+<div class="flex-1 flex items-center justify-center py-8">
+<p class="text-xs text-gray-500 text-center px-4">Сообщений пока нет</p>
+</div>
+</div>
+<p class="hidden text-xs text-gray-500 text-center py-2" id="chat-no-results">Ничего не найдено</p>
+<form data-chat-files-revision="" data-files-target="files-list" data-refund-id="27" id="chat-form">
+<div aria-label="Фотографии для отправки" class="hidden flex flex-wrap gap-2" id="chat-photo-previews"></div>
+<textarea aria-label="Сообщение клиенту" class="block w-full bg-gray-50 rounded-xl px-3 py-2 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none" id="chat-input" name="text" placeholder="Сообщение клиенту, можно вставить фото из буфера" rows="2"></textarea>
+<div class="flex justify-end mt-2">
+<button class="flex items-center gap-1.5 px-4 py-2 bg-brand-500 text-gray-900 text-xs font-semibold rounded-xl hover:bg-brand-400 transition-colors whitespace-nowrap" type="submit">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 12L3.27 3.13A59.77 59.77 0 0121.49 12 59.77 59.77 0 013.27 20.88L6 12zm0 0h7.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                            Отправить клиенту
+                        </button>
+</div>
+</form>
+</section>
+<!-- Файлы, их видит и клиент -->
+<section class="order-4 bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
+<div class="flex items-center justify-between mb-3">
+<h2 class="text-sm font-semibold text-gray-900">Файлы</h2>
+<label class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-gray-800 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition-colors" title="XLS, XLSX, PDF, JPG, PNG, WEBP до 20 МБ">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        Добавить
+                        <input accept=".xls,.xlsx,.pdf,.jpg,.jpeg,.png,.webp" class="hidden" data-internal="false" multiple="" name="file" type="file"/>
+</label>
+</div>
+<div class="attachment-container"><div class="attachment-list" id="files-list">
+<p class="text-xs text-gray-500 text-center py-4 col-span-full">Файлы не прикреплены</p>
+</div></div>
+</section>
+</div>
+</div>
+</div>
+<!-- Invite client modal -->
+<div class="fixed inset-0 bg-black/40 z-50 hidden flex items-center justify-center p-4" id="invite-modal">
+<div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold text-gray-900">Создать аккаунт клиента</h2>
+<button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<form class="space-y-4">
+<input id="invite-refund-id" type="hidden"/>
+<div>
+<label class="block text-xs font-semibold text-gray-700 mb-1.5">Email клиента *</label>
+<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" id="invite-email" required="" type="email"/>
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-700 mb-1.5">Имя клиента *</label>
+<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" id="invite-name" placeholder="ООО Компания / Иван Иванов" required="" type="text"/>
+</div>
+<p class="text-xs text-gray-500">Пароль будет сгенерирован автоматически и отправлен на указанный email.</p>
+<div class="flex gap-3 pt-2">
+<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-2xl font-bold hover:bg-brand-400 transition-all text-sm" id="invite-submit-btn" type="submit">
+                    Создать и отправить пароль
+                </button>
+<button class="flex-none px-5 py-3 bg-gray-100 text-gray-600 rounded-2xl font-semibold hover:bg-gray-200 transition-all text-sm" type="button">
+                    Отмена
+                </button>
+</div>
+</form>
+</div>
+</div>
+<!-- Supplier creation modal -->
+<div class="fixed inset-0 bg-black/40 z-50 hidden flex items-center justify-center p-4" id="supplier-modal">
+<div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+<div id="supplier-modal-content"></div>
+</div>
+</div>
+<!-- Image preview lightbox -->
+<div aria-label="Просмотр изображения" aria-modal="true" class="fixed inset-0 bg-black/80 z-[60] hidden items-center justify-center p-4" id="image-lightbox" role="dialog" tabindex="-1">
+<button aria-label="Закрыть просмотр" class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-white/10 text-white rounded-full hover:bg-white/20 transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Предыдущее фото" class="lightbox-nav hidden absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-white/10 text-white rounded-full hover:bg-white/20 transition-colors" id="lightbox-prev" type="button">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Следующее фото" class="lightbox-nav hidden absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-white/10 text-white rounded-full hover:bg-white/20 transition-colors" id="lightbox-next" type="button">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="max-w-5xl max-h-[90vh] flex flex-col items-center gap-3">
+<img alt="" class="max-w-full max-h-[80vh] rounded-2xl shadow-2xl object-contain bg-white" id="image-lightbox-img" src=""/>
+<p class="text-white/80 text-sm font-medium" id="image-lightbox-name"></p>
+</div>
+</div>
+
+
+</main>
+</div>
+<!-- Export to 1C modal -->
+<div class="fixed inset-0 bg-black/40 z-[70] hidden items-center justify-center p-4" data-close-self="close:export-1c-modal" id="export-1c-modal">
+<div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-lg font-bold text-gray-900">Выгрузка в 1С</h2>
+<button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close:export-1c-modal">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<p class="text-xs text-gray-500 mb-6" id="export-1c-subtitle">Выберите способ выгрузки данных о возвратах.</p>
+<div class="space-y-3">
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-gray-100 transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" type="button">
+<svg class="w-5 h-5 text-gray-600 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-sm font-semibold text-gray-800">Скачать файлом</span>
+</button>
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-brand-500 text-gray-900 rounded-2xl hover:bg-brand-400 transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" id="export-1c-ftp-btn" type="button">
+<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-sm font-semibold">Отправить по FTP</span>
+</button>
+</div>
+</div>
+</div>
+
+<script src="maket.js?v=2cc5fc0130e6"></script></body></html>

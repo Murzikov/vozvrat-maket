@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html class="h-full" lang="ru"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Возврат #20112 – Система управления возвратами</title>
+<link href="static/css/tailwind.css?v=e17b3f6e1048" rel="stylesheet"/>
+
+<link href="static/css/fonts.css?v=46ceeff3d4ce" rel="stylesheet"/>
+<link href="static/css/custom.css?v=9c4c5d7af955" rel="stylesheet"/>
+
+<style>                      .htmx-indicator{opacity:0}                      .htmx-request .htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                      .htmx-request.htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                    </style><link href="data:," rel="icon"/></head>
+<body class="h-full bg-gray-100 flex flex-col" data-card-can-edit="true">
+<!-- Mobile Header -->
+<div class="md:hidden w-full bg-gray-900 text-white p-4 flex justify-between items-center z-50 sticky top-0" id="mobile-header">
+<div class="flex items-center gap-2">
+<img alt="" class="w-7 h-7" src="static/img/amx24-mark.png?v=53ecca95120a"/>
+<span class="font-bold text-lg tracking-tight">VOZVRAT</span>
+</div>
+<div class="flex items-center gap-2">
+<button aria-label="Меню" class="p-2 bg-white/10 text-white rounded-xl" data-maket-menu="">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar: графит, как меню Основы -->
+<aside class="hidden md:flex flex-col w-64 bg-gray-900 text-gray-300 shadow-2xl md:shadow-none shrink-0 fixed md:static top-0 left-0 h-full z-40" id="main-sidebar">
+<div class="p-6 flex-1 overflow-y-auto">
+<div class="flex items-center gap-2.5 mb-8">
+<img alt="" class="w-8 h-8" src="static/img/amx24-mark.png?v=53ecca95120a"/>
+<h1 class="font-bold text-xl tracking-tight text-white">VOZVRAT</h1>
+</div>
+<nav class="space-y-1 text-sm font-medium">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl bg-brand-500 text-gray-900 font-semibold transition-colors" href="client-refunds.html">
+<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="flex-1">Мои возвраты</span>
+<span class="" id="nav-unread-badge-wrap"><span id="nav-unread-badge"></span></span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-300 hover:bg-white/10 hover:text-white transition-colors" href="client-requests.html">
+<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 3v-3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="flex-1">Мои запросы</span>
+<span class="" id="nav-requests-badge-wrap"><span id="nav-requests-badge"></span></span>
+</a>
+</nav>
+</div>
+<div class="p-4 border-t border-white/10">
+<div class="flex items-center gap-3 p-2">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-gray-200">
+                    О
+                </div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-semibold text-white leading-snug break-words">ООО Автодеталь-Плюс</p>
+<p class="text-[11px] text-gray-400">
+                        Клиент
+                    </p>
+</div>
+<form data-maket-logout="" method="post">
+<button aria-label="Выйти" class="p-1 text-gray-400 hover:text-white" title="Выйти" type="submit">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</form>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-gray-100">
+<!-- Toast notifications -->
+<div class="fixed top-4 right-4 z-50 space-y-2" id="toast-container"></div>
+<div class="p-4 md:p-6">
+<!-- Шапка: номер, статус, дата -->
+<div class="flex items-center gap-3 mb-4">
+<a aria-label="К списку возвратов" class="w-9 h-9 flex items-center justify-center bg-white rounded-full border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors shrink-0" href="client-refunds.html" title="К списку возвратов">
+<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+<div class="min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<h1 class="text-lg font-bold text-gray-900 mono">Возврат #20112</h1>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap bg-amber-100 text-amber-800"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>Ожидаем деталь</span>
+</div>
+<p class="text-xs text-gray-500 mt-0.5">от 18.10.2026</p>
+</div>
+</div>
+<!-- На телефоне: товар, переписка, файлы. На компьютере: слева товар и файлы, справа переписка -->
+<div class="grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-[auto_1fr] gap-4 items-start">
+<!-- Товар и документ -->
+<section class="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
+<div class="">
+<p class="text-xs text-gray-500 mb-0.5">Товар</p>
+<div class="flex items-baseline justify-between gap-3">
+<span class="text-base font-bold mono text-gray-900 break-all">SP9921</span>
+<span class="text-base font-bold text-gray-900 whitespace-nowrap">1,960.00 ₽</span>
+</div>
+<p class="text-xs text-gray-500 mt-0.5">NGK · 2 шт.</p>
+</div>
+<p class="mt-3 pt-3 border-t border-gray-100 flex justify-between gap-3 text-xs"><span class="text-gray-500">Поставщик</span><span class="text-gray-800 font-medium text-right">Деталь Опт</span></p>
+<div class="mt-3 pt-3 border-t border-gray-100 flex items-center gap-3">
+<svg class="w-5 h-5 shrink-0 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<p class="flex-1 text-xs text-gray-500">УКД ещё не загружен, появится после обработки</p>
+</div>
+</section>
+<!-- Переписка с менеджером -->
+<section class="lg:col-span-7 lg:row-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-4 flex flex-col lg:h-[min(620px,calc(100vh_-_8rem))] lg:min-h-[420px]">
+<h2 class="text-sm font-semibold text-gray-900 mb-3">Переписка с менеджером</h2>
+<div class="flex-1 overflow-y-auto space-y-1 mb-3 pr-1 min-h-[6rem] max-h-[60vh] lg:max-h-none" id="chat-messages"><span data-chat-files-revision="" hidden=""></span>
+<div class="flex-1 flex items-center justify-center py-8">
+<p class="text-xs text-gray-500 text-center px-4">Сообщений пока нет</p>
+</div>
+</div>
+<form data-chat-files-revision="" data-files-target="client-files-list" data-refund-id="17" id="chat-form">
+<div aria-label="Фотографии для отправки" class="hidden flex flex-wrap gap-2" id="chat-photo-previews"></div>
+<div class="flex gap-2 items-end">
+<textarea aria-label="Сообщение менеджеру" class="flex-1 bg-gray-50 rounded-xl px-3 py-2 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none" id="chat-input" name="text" placeholder="Сообщение менеджеру, можно вставить фото" rows="2"></textarea>
+<button aria-label="Отправить" class="flex items-center justify-center gap-1.5 px-4 h-[3.25rem] bg-brand-500 text-gray-900 text-xs font-semibold rounded-xl hover:bg-brand-400 transition-colors" type="submit">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 12L3.27 3.13A59.77 59.77 0 0121.49 12 59.77 59.77 0 013.27 20.88L6 12zm0 0h7.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="hidden sm:inline">Отправить</span>
+</button>
+</div>
+</form>
+</section>
+<!-- Файлы -->
+<section class="lg:col-span-5 attachment-panel bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
+<div class="flex items-center justify-between mb-3">
+<h2 class="text-sm font-semibold text-gray-900">Фото и документы</h2>
+<form>
+<label class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 rounded-xl cursor-pointer hover:bg-gray-200 transition-colors" title="JPG, PNG, WEBP, PDF до 20 МБ, можно несколько">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        Добавить
+                        <input accept=".pdf,.jpg,.jpeg,.png,.webp" class="hidden" multiple="" name="file" type="file"/>
+</label>
+</form>
+</div>
+<div class="attachment-container" id="client-files-list">
+<p class="text-xs text-gray-500 text-center py-4">Файлы не прикреплены</p>
+</div>
+</section>
+</div>
+</div>
+<!-- Image preview lightbox -->
+<div aria-label="Просмотр изображения" aria-modal="true" class="fixed inset-0 bg-black/80 z-[60] hidden items-center justify-center p-4" id="image-lightbox" role="dialog" tabindex="-1">
+<button aria-label="Закрыть просмотр" class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center bg-white/10 text-white rounded-full hover:bg-white/20 transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Предыдущее фото" class="lightbox-nav hidden absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-white/10 text-white rounded-full hover:bg-white/20 transition-colors" id="lightbox-prev" type="button">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button aria-label="Следующее фото" class="lightbox-nav hidden absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center bg-white/10 text-white rounded-full hover:bg-white/20 transition-colors" id="lightbox-next" type="button">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="max-w-5xl max-h-[90vh] flex flex-col items-center gap-3">
+<img alt="" class="max-w-full max-h-[80vh] rounded-2xl shadow-2xl object-contain bg-white" id="image-lightbox-img" src=""/>
+<p class="text-white/80 text-sm font-medium" id="image-lightbox-name"></p>
+</div>
+</div>
+
+
+</main>
+</div>
+
+<script src="maket.js?v=2cc5fc0130e6"></script></body></html>
