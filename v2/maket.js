@@ -49,7 +49,8 @@
     // Как в системе: [название, цвет плашки, цвет кнопки, иконка, группа (1 справа, отдельно от согласования), подпись кнопки].
     var ICON = {
         ok: 'M5 13l4 4L19 7', wait: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', back: 'M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6',
-        no: 'M6 18L18 6M6 6l12 12', box: 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4'
+        no: 'M6 18L18 6M6 6l12 12', box: 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4',
+        work: 'M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z'
     };
     var STATUSES = (PAGE.indexOf('requests-') === 0 || PAGE.indexOf('client-requests-') === 0) ? [
         ['В работе', 'bg-amber-100 text-amber-800', 'bg-amber-400 text-gray-900 hover:bg-amber-300', ICON.wait, 0],
@@ -58,6 +59,7 @@
     ] : [
         ['Согласован', 'bg-green-100 text-green-800', 'bg-green-700 text-white hover:bg-green-800', ICON.ok, 0],
         ['Ожидаем деталь', 'bg-amber-100 text-amber-800', 'bg-amber-400 text-gray-900 hover:bg-amber-300', ICON.wait, 0],
+        ['В работе', 'bg-cyan-100 text-cyan-800', 'bg-white text-cyan-800 ring-1 ring-inset ring-cyan-300 hover:bg-cyan-50', ICON.work, 0],
         ['Получен', 'bg-blue-100 text-blue-800', 'bg-white text-blue-800 ring-1 ring-inset ring-blue-200 hover:bg-blue-50', ICON.back, 0],
         ['Отказано', 'bg-red-100 text-red-800', 'bg-red-600 text-white hover:bg-red-700', ICON.no, 1],
         ['Архив', 'bg-gray-200 text-gray-700', 'bg-white text-gray-800 ring-1 ring-inset ring-gray-300 hover:bg-gray-100', ICON.box, 1, 'В архив']
@@ -66,7 +68,7 @@
         var badge = $$(':scope > span', section)[1];
         var conf = STATUSES.filter(function (s) { return s[0] === label; })[0];
         if (!badge || !conf) return;
-        badge.className = badge.className.replace(/\b(bg|text)-(blue|green|amber|red|violet|gray)-\d+\b/g, '').replace(/\s+/g, ' ').trim() + ' ' + conf[1];
+        badge.className = badge.className.replace(/\b(bg|text)-(blue|cyan|green|amber|red|violet|gray)-\d+\b/g, '').replace(/\s+/g, ' ').trim() + ' ' + conf[1];
         badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-current"></span>' + esc(label);
         $$(':scope > div', section).forEach(function (d) { d.remove(); });
         [0, 1].forEach(function (g) {
@@ -199,6 +201,26 @@
             { col: 4, value: ex && ex.value ? ex.options[ex.selectedIndex].text.toLowerCase() : '' },
             { col: 1, value: dateValue() }]);
     }
+    function filterSuppliers() {
+        var q = $('#supplier-search').value.trim().toLowerCase(), shown = 0;
+        $$('.supplier-row').forEach(function (r) {
+            var on = !q || r.dataset.search.indexOf(q) !== -1;
+            r.classList.toggle('hidden', !on);
+            if (on) shown++;
+        });
+        show($('#supplier-no-results'), !shown && $$('.supplier-row').length > 0);
+    }
+    // ---------- окна «Изменить» и «Новый»: сборка кладёт их в страницу шаблонами ----------
+    function formModal() { return $('#supplier-modal') || $('#user-modal'); }
+    function openForm(key) {
+        var tpl = document.getElementById('maket-form-' + key), modal = formModal();
+        var box = $('#modal-content') || $('#user-modal-content');
+        if (!tpl || !modal || !box) return toast('Это макет: окно редактирования в макете не открывается');
+        box.innerHTML = '';
+        box.appendChild(tpl.content.cloneNode(true));
+        modal.classList.remove('hidden'); modal.classList.add('flex');
+    }
+    function closeForm() { var modal = formModal(); if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); } }
     function filterPeople() {
         var q = ($('#search-input') || { value: '' }).value.trim().toLowerCase();
         var role = ($('#role-filter') || { value: '' }).value;
@@ -226,6 +248,7 @@
             if (!wide.matches) bar.style.display = opening ? 'none' : 'flex';
             return;
         }
+        if (t.id === 'supplier-modal' || t.id === 'user-modal') return closeForm();
         var note = t.closest('[data-maket]');
         if (note) { e.preventDefault(); toast(note.getAttribute('data-maket')); return; }
         var row = t.closest('tr[data-href]');
@@ -249,6 +272,7 @@
                 return show(d, d.classList.contains('hidden'));
             }
             if (act.indexOf('pick:') === 0) { var inp = document.getElementById(arg); if (inp) inp.click(); return; }
+            if (act.indexOf('form:') === 0) return openForm(arg);
             switch (act) {
                 case 'reason-toggle':
                     var form = $('#reason-edit-form'), open = form.classList.contains('hidden');
@@ -280,7 +304,8 @@
                     if (confirm('Удалить файл?')) { actEl.closest('.attachment-row').remove(); toast('Файл удалён'); }
                     return;
                 case 'notes-save': flash('notes-status'); return toast('Заметка сохранена');
-                case 'upd-save': flash('upd-status'); return toast('Номер УПД сохранён');
+                case 'upd-save': flash('upd-status'); return toast('УПД сохранён');
+                case 'close-form': return closeForm();
                 case 'executor-save': flash('executor-status'); return toast('Исполнитель назначен');
                 case 'subject-save': flash('subject-text-status'); return toast('Тема сохранена');
                 case 'supplier-save': return toast('Поставщик сохранён');
@@ -314,6 +339,10 @@
             return;
         }
         if (form.id === 'assign-supplier-form') return;
+        if (form.closest('#supplier-modal, #user-modal') && form.querySelector('[name="email"]')) {
+            closeForm();
+            return toast('Сохранено. В макете изменения не запоминаются');
+        }
         if (/-create\.html$/.test(PAGE)) {
             var back = PAGE.replace('-create.html', '.html');
             var what = PAGE.indexOf('requests') !== -1 ? 'Запрос отправлен' : 'Возврат создан';
@@ -364,6 +393,7 @@
         if (t.id === 'chat-search') return searchIn('#chat-messages', '.chat-item', t.value, 'chat-no-results');
         if (t.id === 'comments-search') return searchIn('#comments-list', '.comment-item', t.value, 'comments-no-results');
         if (t.id === 'search-input') return filterPeople();
+        if (t.id === 'supplier-search') return filterSuppliers();
         if (t.id === 'notes-input') { flash('notes-status', 'Сохраняю...'); clearTimeout(noteTimer); noteTimer = setTimeout(function () { flash('notes-status'); }, 700); return; }
         if (t.name === 'order_id' && ($('#refunds-tbody') || $('#requests-tbody'))) {
             if (t.value.length === 1) toast('ID заказа в списке не показан, поиск по нему работает только в системе');
