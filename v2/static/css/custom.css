@@ -2,11 +2,13 @@ body { font-family: 'Inter', sans-serif; }
 .mono { font-family: 'IBM Plex Mono', monospace; }
 
 .table-container::-webkit-scrollbar { height: 4px; }
-.table-container::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+.table-container::-webkit-scrollbar-thumb { background: #E6E2DD; border-radius: 10px; }
 
-.htmx-indicator { opacity: 0; transition: opacity 200ms ease-in; }
+.htmx-indicator { opacity: 0; transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1); }
 .htmx-request .htmx-indicator { opacity: 1; }
 .htmx-request.htmx-indicator { opacity: 1; }
+/* Подпись загрузки занимает место только во время загрузки. */
+#table-spinner:not(.htmx-request) { display: none; }
 
 body[data-card-can-edit="false"] main button:disabled {
     opacity: 0.45;
@@ -20,7 +22,7 @@ body[data-card-can-edit="false"] main button:disabled {
 
 .refunds-table {
     --refunds-cell-padding: 1rem;
-    --refunds-label-color: #6b7280;
+    --refunds-label-color: #736D66;
 }
 
 .refunds-table th,
@@ -28,9 +30,12 @@ body[data-card-can-edit="false"] main button:disabled {
     padding-inline: var(--refunds-cell-padding);
 }
 
-.refunds-table th:nth-child(2) { width: 28%; }
-.refunds-table th:nth-child(3) { width: 17%; }
-.refunds-table th:nth-child(5) { width: 8.5rem; }
+.refunds-table { table-layout: fixed; }
+.refunds-table th:nth-child(1) { width: 12%; }
+.refunds-table th:nth-child(3) { width: 14%; }
+.refunds-table th:nth-child(4) { width: 10%; }
+.refunds-table th:nth-child(5) { width: 15%; }
+.refunds-table th:nth-child(6) { width: 20%; }
 .refunds-table th:nth-child(7) { width: 3.5rem; }
 
 .refunds-table td:nth-child(2),
@@ -51,13 +56,20 @@ body[data-card-can-edit="false"] main button:disabled {
     align-items: center;
 }
 
+/* Суммы друг под другом: по правому краю, цифры одной ширины. */
+.refunds-table th:nth-child(4),
+.refunds-table td:nth-child(4) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
 @container (max-width: 56rem) {
     .refunds-table,
     .refunds-table tbody { display: block; }
 
     .refunds-table thead { display: none; }
 
-    .refunds-table tr {
+    .refunds-table tr:not(.hidden) {
         display: grid;
         grid-template-columns: minmax(min-content, 1fr) minmax(0, 1fr);
         grid-template-areas: "id action" "client client" "article article" "amount sent" "status status";
@@ -69,7 +81,7 @@ body[data-card-can-edit="false"] main button:disabled {
     .refunds-table td:nth-child(1) { grid-area: id; }
     .refunds-table td:nth-child(2) { grid-area: client; }
     .refunds-table td:nth-child(3) { grid-area: article; }
-    .refunds-table td:nth-child(4) { grid-area: amount; }
+    .refunds-table td:nth-child(4) { grid-area: amount; text-align: left; }
     .refunds-table td:nth-child(5) { grid-area: sent; }
     .refunds-table td:nth-child(6) { grid-area: status; }
     .refunds-table td:nth-child(7) { grid-area: action; text-align: right; }
@@ -80,12 +92,56 @@ body[data-card-can-edit="false"] main button:disabled {
         display: block;
         margin-bottom: 0.25rem;
         color: var(--refunds-label-color);
-        font-size: 0.625rem;
+        font-size: 0.75rem;
         font-weight: 600;
         white-space: normal;
     }
 
     .refunds-table + div > div {
+        flex-wrap: wrap;
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+/* Список запросов на узком экране карточками, как возвраты. */
+#requests-results {
+    container-type: inline-size;
+}
+
+@container (max-width: 56rem) {
+    .requests-table,
+    .requests-table tbody { display: block; }
+
+    .requests-table thead { display: none; }
+
+    .requests-table tr:not(.hidden) {
+        display: grid;
+        grid-template-columns: minmax(min-content, 1fr) minmax(0, 1fr);
+        grid-template-areas: "id action" "client client" "article executor" "status status";
+        gap: 0.75rem 1rem;
+        padding: 1rem;
+    }
+
+    .requests-table td { padding: 0; min-width: 0; }
+    .requests-table td:nth-child(1) { grid-area: id; }
+    .requests-table td:nth-child(2) { grid-area: client; }
+    .requests-table td:nth-child(3) { grid-area: article; }
+    .requests-table td:nth-child(4) { grid-area: executor; }
+    .requests-table td:nth-child(5) { grid-area: status; }
+    .requests-table td:nth-child(6) { grid-area: action; text-align: right; }
+    .requests-table td[colspan] { grid-column: 1 / -1; padding-block: 2rem; }
+
+    .requests-table td[data-label]:not([data-label=""])::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 0.25rem;
+        color: #736D66;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .requests-table + div > div {
         flex-wrap: wrap;
         min-width: 0;
         max-width: 100%;
@@ -129,8 +185,8 @@ body[data-card-can-edit="false"] main button:disabled {
 }
 .attachment-size {
     overflow: hidden;
-    color: #6b7280;
-    font-size: 0.625rem;
+    color: #736D66;
+    font-size: 0.6875rem;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -142,13 +198,13 @@ body[data-card-can-edit="false"] main button:disabled {
     width: 1.75rem;
     height: 1.75rem;
     flex: none;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #E6E2DD;
     border-radius: 0.5rem;
     background: #fff;
 }
 .attachment-action svg { width: 0.875rem; height: 0.875rem; }
 .attachment-action:focus-visible {
-    outline: 2px solid #111827;
+    outline: 2px solid #2F2E2D;
     outline-offset: 2px;
 }
 @media (pointer: coarse) {
@@ -161,5 +217,31 @@ body[data-card-can-edit="false"] main button:disabled {
 #comments:target { box-shadow: 0 0 0 3px #E9CD6A; }
 #chat:target { box-shadow: 0 0 0 3px #F9BD7A; }
 
+/* Тост и окно уведомлений коротко проявляются и сдвигаются на несколько пикселей. */
+#toast-container > div,
+#desktop-bell-dropdown,
+#mobile-bell-dropdown {
+    animation: drop-in 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes drop-in {
+    from { opacity: 0; transform: translateY(-6px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    #toast-container > div,
+    #desktop-bell-dropdown,
+    #mobile-bell-dropdown { animation: none; }
+}
+
 /* Подсказки в полях читаются (по умолчанию у Tailwind 2,6:1): в них важное, например «можно вставить фото из буфера». */
 input::placeholder, textarea::placeholder { color: #736D66; }
+
+/* Пустой список серый, как подсказка в поле: видно, что ничего не выбрано. */
+select:has(option[value=""]:checked) { color: #736D66; }
+select option { color: #2F2E2D; }
+
+/* iPhone приближает страницу, если шрифт поля мельче 16px. На телефоне поля 16px, на компьютере как в разметке. */
+@media (max-width: 767px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+    select,
+    textarea { font-size: 16px !important; }
+}

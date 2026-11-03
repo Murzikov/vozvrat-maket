@@ -3,13 +3,13 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Запрос Z-30003 – Система управления возвратами</title>
-<link href="static/css/tailwind.css?v=830a0ea57a0f" rel="stylesheet"/>
+<link href="static/css/tailwind.css?v=0a747ed1ffd5" rel="stylesheet"/>
 
 <link href="static/css/fonts.css?v=46ceeff3d4ce" rel="stylesheet"/>
-<link href="static/css/custom.css?v=9c4c5d7af955" rel="stylesheet"/>
+<link href="static/css/custom.css?v=746c10878c09" rel="stylesheet"/>
 
 <style>                      .htmx-indicator{opacity:0}                      .htmx-request .htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                      .htmx-request.htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                    </style><link href="data:," rel="icon"/></head>
-<body class="h-full bg-gray-100 flex flex-col" data-card-can-edit="true">
+<body class="h-full bg-gray-100 text-gray-900 flex flex-col" data-card-can-edit="true">
 <!-- Mobile Header -->
 <div class="md:hidden w-full bg-gray-900 text-white p-4 flex justify-between items-center z-50 sticky top-0" id="mobile-header">
 <div class="flex items-center gap-2">
@@ -17,14 +17,14 @@
 <span class="font-bold text-lg tracking-tight">VOZVRAT</span>
 </div>
 <div class="flex items-center gap-2">
-<button aria-label="Меню" class="p-2 bg-white/10 text-white rounded-xl" data-maket-menu="">
+<button aria-label="Меню" class="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-colors" data-maket-menu="">
 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
 </div>
 <div class="flex flex-1 overflow-hidden">
 <!-- Sidebar: графит, как меню Основы -->
-<aside class="hidden md:flex flex-col w-64 bg-gray-900 text-gray-300 shadow-2xl md:shadow-none shrink-0 fixed md:static top-0 left-0 h-full z-40" id="main-sidebar">
+<aside class="flex hidden md:flex flex-col w-64 bg-gray-900 text-gray-300 shadow-2xl md:shadow-none shrink-0 fixed md:static top-0 left-0 h-full z-40" id="main-sidebar">
 <div class="p-6 flex-1 overflow-y-auto">
 <div class="flex items-center gap-2.5 mb-8">
 <img alt="" class="w-8 h-8" src="static/img/amx24-mark.png?v=53ecca95120a"/>
@@ -45,7 +45,7 @@
 </div>
 <div class="p-4 border-t border-white/10">
 <div class="flex items-center gap-3 p-2">
-<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-gray-200">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-semibold text-gray-200">
                     О
                 </div>
 <div class="flex-1 min-w-0">
@@ -55,7 +55,7 @@
                     </p>
 </div>
 <form data-maket-logout="" method="post">
-<button aria-label="Выйти" class="p-1 text-gray-400 hover:text-white" title="Выйти" type="submit">
+<button aria-label="Выйти" class="p-2 -m-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors" title="Выйти" type="submit">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </form>
@@ -65,23 +65,23 @@
 <!-- Main Content -->
 <main class="flex-1 overflow-y-auto bg-gray-100">
 <!-- Toast notifications -->
-<div class="fixed top-4 right-4 z-50 space-y-2" id="toast-container"></div>
+<div class="fixed top-20 right-4 md:right-6 z-50 space-y-2" id="toast-container"></div>
 <div class="p-4 md:p-6">
 <!-- Шапка: номер, статус, дата -->
-<div class="flex items-center gap-3 mb-4">
+<div class="flex items-center gap-3 mb-section">
 <a aria-label="К списку запросов" class="w-9 h-9 flex items-center justify-center bg-white rounded-full border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors shrink-0" href="client-requests.html" title="К списку запросов">
 <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </a>
 <div class="min-w-0">
 <div class="flex items-center gap-2 flex-wrap">
-<h1 class="text-lg font-bold text-gray-900 mono">Запрос Z-30003</h1>
-<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap bg-blue-100 text-blue-800"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>Получен</span>
+<h1 class="text-xl font-semibold text-gray-900">Запрос <span class="mono font-medium">Z-30003</span></h1>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-blue-100 text-blue-800"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>Получен</span>
 </div>
 <p class="text-xs text-gray-500 mt-0.5">от 20.10.2026</p>
 </div>
 </div>
 <!-- На телефоне: запрос, переписка, файлы. На компьютере: слева запрос и файлы, справа переписка -->
-<div class="grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-[auto_1fr] gap-4 items-start">
+<div class="grid grid-cols-1 lg:grid-cols-12 lg:grid-rows-[auto_1fr] gap-section items-start">
 <section class="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
 <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-xs">
 <dt class="text-gray-500">Тема</dt><dd class="text-gray-900 font-semibold text-right">Подбор колодок</dd>
@@ -92,8 +92,8 @@
 <div class="mt-3 pt-3 border-t border-gray-100">
 <p class="text-xs text-gray-500 mb-0.5">Товар</p>
 <div class="flex items-baseline justify-between gap-3">
-<span class="text-sm font-bold mono text-gray-900 break-all">TB4418GT</span>
-<span class="text-sm font-bold text-gray-900 whitespace-nowrap">3,062.19 ₽</span>
+<span class="text-base font-medium mono text-gray-900 break-all">TB4418GT</span>
+<span class="text-base font-semibold text-gray-900 whitespace-nowrap tabular-nums">3 062,19 ₽</span>
 </div>
 <p class="text-xs text-gray-500 mt-0.5">Gates · 1 шт.</p>
 </div>
@@ -107,8 +107,8 @@
 </div>
 <form id="chat-form">
 <div class="flex gap-2 items-end">
-<textarea aria-label="Сообщение менеджеру" class="flex-1 bg-gray-50 rounded-xl px-3 py-2 text-sm ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none" id="chat-input" name="text" placeholder="Сообщение менеджеру" rows="2"></textarea>
-<button aria-label="Отправить" class="flex items-center justify-center gap-1.5 px-4 h-[3.25rem] bg-brand-500 text-gray-900 text-xs font-semibold rounded-xl hover:bg-brand-400 transition-colors" type="submit">
+<textarea aria-label="Сообщение менеджеру" class="flex-1 bg-white rounded-xl px-3 py-2 text-sm ring-1 ring-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none" id="chat-input" name="text" placeholder="Сообщение менеджеру" rows="2"></textarea>
+<button aria-label="Отправить" class="flex items-center justify-center gap-1.5 px-4 self-stretch bg-brand-500 text-gray-900 text-xs font-semibold rounded-xl hover:bg-brand-400 transition-colors" type="submit">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 12L3.27 3.13A59.77 59.77 0 0121.49 12 59.77 59.77 0 013.27 20.88L6 12zm0 0h7.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span class="hidden sm:inline">Отправить</span>
 </button>
@@ -153,4 +153,4 @@
 </main>
 </div>
 
-<script src="maket.js?v=5cf3426ce4f8"></script></body></html>
+<script src="maket.js?v=e54c1e3e7d23"></script></body></html>

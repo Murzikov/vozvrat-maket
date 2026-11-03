@@ -53,14 +53,14 @@
         work: 'M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z'
     };
     var STATUSES = (PAGE.indexOf('requests-') === 0 || PAGE.indexOf('client-requests-') === 0) ? [
-        ['В работе', 'bg-amber-100 text-amber-800', 'bg-amber-400 text-gray-900 hover:bg-amber-300', ICON.wait, 0],
+        ['В работе', 'bg-amber-100 text-amber-800', 'bg-amber-400 text-gray-900 hover:bg-amber-300', ICON.work, 0],
         ['Завершён', 'bg-green-100 text-green-800', 'bg-green-700 text-white hover:bg-green-800', ICON.ok, 0],
-        ['Получен', 'bg-blue-100 text-blue-800', 'bg-white text-blue-800 ring-1 ring-inset ring-blue-200 hover:bg-blue-50', ICON.back, 0]
+        ['Получен', 'bg-blue-100 text-blue-800', 'bg-white text-blue-800 ring-1 ring-inset ring-blue-300 hover:bg-blue-50', ICON.back, 0]
     ] : [
         ['Согласован', 'bg-green-100 text-green-800', 'bg-green-700 text-white hover:bg-green-800', ICON.ok, 0],
         ['Ожидаем деталь', 'bg-amber-100 text-amber-800', 'bg-amber-400 text-gray-900 hover:bg-amber-300', ICON.wait, 0],
         ['В работе', 'bg-cyan-100 text-cyan-800', 'bg-white text-cyan-800 ring-1 ring-inset ring-cyan-300 hover:bg-cyan-50', ICON.work, 0],
-        ['Получен', 'bg-blue-100 text-blue-800', 'bg-white text-blue-800 ring-1 ring-inset ring-blue-200 hover:bg-blue-50', ICON.back, 0],
+        ['Получен', 'bg-blue-100 text-blue-800', 'bg-white text-blue-800 ring-1 ring-inset ring-blue-300 hover:bg-blue-50', ICON.back, 0],
         ['Отказано', 'bg-red-100 text-red-800', 'bg-red-600 text-white hover:bg-red-700', ICON.no, 1],
         ['Архив', 'bg-gray-200 text-gray-700', 'bg-white text-gray-800 ring-1 ring-inset ring-gray-300 hover:bg-gray-100', ICON.box, 1, 'В архив']
     ];
@@ -97,9 +97,9 @@
         var list = $('.space-y-3', box);
         if (!list) { box.innerHTML = ''; list = el('<div class="space-y-3"></div>'); box.appendChild(list); }
         list.appendChild(el('<div class="chat-item flex flex-col items-end" data-search="' + esc((text + ' ' + ME).toLowerCase()) + '">' +
-            '<div class="bg-gray-900 text-white rounded-2xl px-3.5 py-2.5 max-w-[85%]"><p class="text-xs leading-relaxed whitespace-pre-wrap break-words">' + esc(text) + '</p></div>' +
-            '<div class="flex items-center gap-1.5 mt-1 px-1"><span class="text-[10px] text-gray-500">' + esc(ME) + '</span>' +
-            '<span class="text-[10px] text-gray-400">·</span><span class="text-[10px] text-gray-500">' + now() + '</span></div></div>'));
+            '<div class="bg-gray-900 text-white rounded-2xl px-3.5 py-2.5 max-w-[85%]"><p class="text-sm leading-5 whitespace-pre-wrap break-words">' + esc(text) + '</p></div>' +
+            '<div class="flex items-center gap-1.5 mt-1 px-1"><span class="text-[11px] text-gray-500">' + esc(ME) + '</span>' +
+            '<span class="text-[11px] text-gray-500">·</span><span class="text-[11px] text-gray-500">' + now() + '</span></div></div>'));
         box.scrollTop = box.scrollHeight;
     }
     function addComment(text) {
@@ -108,9 +108,9 @@
         var list = $('.space-y-2', box);
         if (!list) { box.innerHTML = ''; list = el('<div class="space-y-2"></div>'); box.appendChild(list); }
         list.appendChild(el('<div class="comment-item flex flex-col items-end" data-search="' + esc((text + ' ' + ME).toLowerCase()) + '">' +
-            '<div class="bg-note-100 text-gray-900 rounded-xl px-3 py-2 max-w-[95%]"><p class="text-xs leading-relaxed whitespace-pre-wrap break-words">' + esc(text) + '</p></div>' +
-            '<div class="flex items-center gap-1.5 mt-0.5 px-1"><span class="text-[10px] text-gray-500">' + esc(ME) + '</span>' +
-            '<span class="text-[10px] text-gray-400">·</span><span class="text-[10px] text-gray-500">' + now() + '</span></div></div>'));
+            '<div class="bg-note-100 text-gray-900 rounded-xl px-3 py-2 max-w-[95%]"><p class="text-sm leading-5 whitespace-pre-wrap break-words">' + esc(text) + '</p></div>' +
+            '<div class="flex items-center gap-1.5 mt-0.5 px-1"><span class="text-[11px] text-gray-500">' + esc(ME) + '</span>' +
+            '<span class="text-[11px] text-gray-500">·</span><span class="text-[11px] text-gray-500">' + now() + '</span></div></div>'));
         box.scrollTop = box.scrollHeight;
     }
     function searchIn(boxSel, itemSel, query, emptyId) {
@@ -127,7 +127,7 @@
     function fileTile(name, size, url) {
         var thumb = url
             ? '<button type="button" class="attachment-thumb rounded-xl overflow-hidden shrink-0 ring-1 ring-gray-200" data-preview="' + url + '"><img src="' + url + '" alt="" class="w-full h-full object-cover"></button>'
-            : '<div class="attachment-thumb rounded-xl bg-gray-100 text-gray-700 flex items-center justify-center shrink-0"><span class="text-[10px] font-bold mono">' + esc(name.split('.').pop().toUpperCase().slice(0, 4)) + '</span></div>';
+            : '<div class="attachment-thumb rounded-xl bg-gray-100 text-gray-700 flex items-center justify-center shrink-0"><span class="text-[11px] font-medium mono">' + esc(name.split('.').pop().toUpperCase().slice(0, 4)) + '</span></div>';
         return el('<div class="attachment-row" title="' + esc(name) + '">' + thumb +
             '<div class="attachment-info"><p class="attachment-name">' + esc(name) + '</p><p class="attachment-size">' + size + '</p></div>' +
             '<div class="attachment-actions"><button type="button" data-act="file-delete" class="attachment-action text-gray-600 hover:text-red-600" title="Удалить" aria-label="Удалить">' +
@@ -297,8 +297,8 @@
                     var take = act === 'client-take';
                     tr.children[1].innerHTML = take ? '<span class="text-blue-600 font-semibold text-sm">Вы</span>' : '<span class="text-amber-700 text-sm">не назначен</span>';
                     tr.children[2].innerHTML = take
-                        ? '<button data-act="client-release" class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-red-700 bg-red-50 hover:bg-red-100">Открепить</button>'
-                        : '<button data-act="client-take" class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-blue-800 bg-blue-100 hover:bg-blue-200">Взять себе</button>';
+                        ? '<button data-act="client-release" class="px-3 py-1.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors text-red-700 bg-red-50 hover:bg-red-100">Открепить</button>'
+                        : '<button data-act="client-take" class="px-3 py-1.5 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors text-blue-800 bg-blue-100 hover:bg-blue-200">Взять себе</button>';
                     return toast(take ? 'Клиент закреплён за вами' : 'Клиент откреплён');
                 case 'file-delete':
                     if (confirm('Удалить файл?')) { actEl.closest('.attachment-row').remove(); toast('Файл удалён'); }

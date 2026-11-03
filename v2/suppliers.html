@@ -3,13 +3,13 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Поставщики – Система управления возвратами</title>
-<link href="static/css/tailwind.css?v=830a0ea57a0f" rel="stylesheet"/>
+<link href="static/css/tailwind.css?v=0a747ed1ffd5" rel="stylesheet"/>
 
 <link href="static/css/fonts.css?v=46ceeff3d4ce" rel="stylesheet"/>
-<link href="static/css/custom.css?v=9c4c5d7af955" rel="stylesheet"/>
+<link href="static/css/custom.css?v=746c10878c09" rel="stylesheet"/>
 
 <style>                      .htmx-indicator{opacity:0}                      .htmx-request .htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                      .htmx-request.htmx-indicator{opacity:1; transition: opacity 200ms ease-in;}                    </style><link href="data:," rel="icon"/></head>
-<body class="h-full bg-gray-100 flex flex-col" data-card-can-edit="true">
+<body class="h-full bg-gray-100 text-gray-900 flex flex-col" data-card-can-edit="true">
 <!-- Mobile Header -->
 <div class="md:hidden w-full bg-gray-900 text-white p-4 flex justify-between items-center z-50 sticky top-0" id="mobile-header">
 <div class="flex items-center gap-2">
@@ -27,7 +27,7 @@
 <div class="hidden absolute right-0 top-full mt-1 w-72 bg-white rounded-2xl shadow-xl border border-gray-200 z-[100] overflow-hidden" id="mobile-bell-dropdown">
 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
 <p class="text-sm font-semibold text-gray-900">Уведомления</p>
-<button class="text-gray-500 hover:text-gray-900" data-act="toggle:mobile-bell-dropdown">
+<button class="w-8 h-8 -mr-2 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors" data-act="toggle:mobile-bell-dropdown">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
@@ -36,14 +36,14 @@
 </div>
 </div>
 </div>
-<button aria-label="Меню" class="p-2 bg-white/10 text-white rounded-xl" data-maket-menu="">
+<button aria-label="Меню" class="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-colors" data-maket-menu="">
 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
 </div>
 <div class="flex flex-1 overflow-hidden">
 <!-- Sidebar: графит, как меню Основы -->
-<aside class="hidden md:flex flex-col w-64 bg-gray-900 text-gray-300 shadow-2xl md:shadow-none shrink-0 fixed md:static top-0 left-0 h-full z-40" id="main-sidebar">
+<aside class="flex hidden md:flex flex-col w-64 bg-gray-900 text-gray-300 shadow-2xl md:shadow-none shrink-0 fixed md:static top-0 left-0 h-full z-40" id="main-sidebar">
 <div class="p-6 flex-1 overflow-y-auto">
 <div class="flex items-center gap-2.5 mb-8">
 <img alt="" class="w-8 h-8" src="static/img/amx24-mark.png?v=53ecca95120a"/>
@@ -100,7 +100,7 @@
 </div>
 <div class="p-4 border-t border-white/10">
 <div class="flex items-center gap-3 p-2">
-<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-bold text-gray-200">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs font-semibold text-gray-200">
                     Д
                 </div>
 <div class="flex-1 min-w-0">
@@ -111,7 +111,7 @@
                     </p>
 </div>
 <form data-maket-logout="" method="post">
-<button aria-label="Выйти" class="p-1 text-gray-400 hover:text-white" title="Выйти" type="submit">
+<button aria-label="Выйти" class="p-2 -m-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors" title="Выйти" type="submit">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </form>
@@ -121,11 +121,11 @@
 <!-- Main Content -->
 <main class="flex-1 overflow-y-auto bg-gray-100 md:pr-12">
 <!-- Toast notifications -->
-<div class="fixed top-4 right-4 z-50 space-y-2" id="toast-container"></div>
+<div class="fixed top-20 right-4 md:right-6 z-50 space-y-2" id="toast-container"></div>
 <!-- Bell notification button (desktop, fixed top-right) -->
-<div class="hidden md:block fixed top-4 right-4 z-40">
+<div class="hidden md:block fixed top-6 right-6 z-40">
 <div class="relative">
-<button class="relative p-2.5 bg-white text-gray-500 hover:text-gray-800 shadow-sm border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors" data-act="toggle:desktop-bell-dropdown" id="bell-btn">
+<button class="relative w-9 h-9 flex items-center justify-center bg-white text-gray-500 hover:text-gray-800 shadow-sm border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors" data-act="toggle:desktop-bell-dropdown" id="bell-btn">
 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
 <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
 </svg>
@@ -135,7 +135,7 @@
 <div class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-200 z-[100] overflow-hidden" id="desktop-bell-dropdown">
 <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
 <p class="text-sm font-semibold text-gray-900">Уведомления</p>
-<button class="text-gray-500 hover:text-gray-900" data-act="toggle:desktop-bell-dropdown">
+<button class="w-8 h-8 -mr-2 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors" data-act="toggle:desktop-bell-dropdown">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
@@ -147,14 +147,14 @@
 </div>
 <div class="p-4 md:p-6">
 <!-- Header -->
-<div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-<h1 class="text-xl font-bold text-gray-900">Поставщики</h1>
+<div class="flex flex-wrap items-center justify-between gap-3 min-h-9 mb-section">
+<h1 class="text-xl font-semibold text-gray-900 leading-9">Поставщики</h1>
 <button class="inline-flex items-center gap-2 px-3.5 py-2 bg-brand-500 text-gray-900 rounded-xl text-sm font-semibold hover:bg-brand-400 transition-colors" data-act="form:supplier-new">
 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
             Новый поставщик
         </button>
 </div>
-<div class="flex flex-wrap gap-2 mb-3">
+<div class="flex flex-wrap gap-2 mb-section">
 <input aria-label="Поиск поставщика" class="w-full sm:w-80 bg-white px-3 py-2 text-sm text-gray-900 ring-1 ring-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500" id="supplier-search" placeholder="Поиск по названию или почте…" type="text"/>
 </div>
 <!-- Table -->
@@ -163,11 +163,11 @@
 <table class="w-full">
 <thead>
 <tr class="bg-gray-50 border-b border-gray-100">
-<th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-500">Поставщик</th>
-<th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-500">Почта</th>
-<th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-500">Активных возвратов</th>
-<th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-500">Статус</th>
-<th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-500">Действия</th>
+<th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 whitespace-nowrap">Поставщик</th>
+<th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 whitespace-nowrap">Почта</th>
+<th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 whitespace-nowrap">Активных возвратов</th>
+<th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 whitespace-nowrap">Статус</th>
+<th class="text-left px-4 py-2.5 text-xs font-semibold text-gray-500 whitespace-nowrap">Действия</th>
 </tr>
 </thead>
 <tbody>
@@ -184,7 +184,7 @@
 <span class="font-semibold text-gray-900 text-sm">5</span>
 </td>
 <td class="px-4 py-2.5">
-<span class="px-2.5 py-1 bg-green-100 text-green-700 rounded-lg text-[11px] font-semibold">Активен</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap bg-green-100 text-green-800"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>Активен</span>
 </td>
 <td class="px-4 py-2.5">
 <button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="form:supplier-1">
@@ -205,7 +205,7 @@
 <span class="font-semibold text-gray-900 text-sm">5</span>
 </td>
 <td class="px-4 py-2.5">
-<span class="px-2.5 py-1 bg-green-100 text-green-700 rounded-lg text-[11px] font-semibold">Активен</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap bg-green-100 text-green-800"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>Активен</span>
 </td>
 <td class="px-4 py-2.5">
 <button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="form:supplier-2">
@@ -226,7 +226,7 @@
 <span class="font-semibold text-gray-900 text-sm">5</span>
 </td>
 <td class="px-4 py-2.5">
-<span class="px-2.5 py-1 bg-green-100 text-green-700 rounded-lg text-[11px] font-semibold">Активен</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap bg-green-100 text-green-800"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>Активен</span>
 </td>
 <td class="px-4 py-2.5">
 <button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="form:supplier-4">
@@ -247,7 +247,7 @@
 <span class="font-semibold text-gray-900 text-sm">5</span>
 </td>
 <td class="px-4 py-2.5">
-<span class="px-2.5 py-1 bg-green-100 text-green-700 rounded-lg text-[11px] font-semibold">Активен</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap bg-green-100 text-green-800"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>Активен</span>
 </td>
 <td class="px-4 py-2.5">
 <button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="form:supplier-3">
@@ -268,7 +268,7 @@
 <span class="font-semibold text-gray-900 text-sm">5</span>
 </td>
 <td class="px-4 py-2.5">
-<span class="px-2.5 py-1 bg-green-100 text-green-700 rounded-lg text-[11px] font-semibold">Активен</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap bg-green-100 text-green-800"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>Активен</span>
 </td>
 <td class="px-4 py-2.5">
 <button class="px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors text-gray-800 bg-gray-100 hover:bg-gray-200" data-act="form:supplier-5">
@@ -297,18 +297,18 @@
 <div class="fixed inset-0 bg-black/40 z-[70] hidden items-center justify-center p-4" data-close-self="close:export-1c-modal" id="export-1c-modal">
 <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
 <div class="flex items-center justify-between mb-2">
-<h2 class="text-lg font-bold text-gray-900">Выгрузка в 1С</h2>
+<h2 class="text-lg font-semibold text-gray-900">Выгрузка в 1С</h2>
 <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close:export-1c-modal">
 <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
 </div>
-<p class="text-xs text-gray-500 mb-6" id="export-1c-subtitle">Выберите способ выгрузки данных о возвратах.</p>
+<p class="text-xs text-gray-500 mb-6" id="export-1c-subtitle">Выберите способ выгрузки данных о возвратах</p>
 <div class="space-y-3">
-<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-gray-100 transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" type="button">
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 ring-1 ring-inset ring-gray-200 rounded-xl hover:bg-gray-100 transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" type="button">
 <svg class="w-5 h-5 text-gray-600 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span class="text-sm font-semibold text-gray-800">Скачать файлом</span>
 </button>
-<button class="w-full flex items-center gap-3 px-4 py-3 bg-brand-500 text-gray-900 rounded-2xl hover:bg-brand-400 transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" id="export-1c-ftp-btn" type="button">
+<button class="w-full flex items-center gap-3 px-4 py-3 bg-brand-500 text-gray-900 rounded-xl hover:bg-brand-400 transition-colors text-left" data-act="note:Это макет: выгрузка в 1с не выполняется" id="export-1c-ftp-btn" type="button">
 <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 <span class="text-sm font-semibold">Отправить по FTP</span>
 </button>
@@ -316,9 +316,9 @@
 </div>
 </div>
 
-<template id="maket-form-supplier-1"><div class="p-8">
+<template id="maket-form-supplier-1"><div class="p-6 sm:p-8">
 <div class="flex items-center justify-between mb-6">
-<h2 class="text-lg font-bold text-gray-900">
+<h2 class="text-lg font-semibold text-gray-900">
             Изменить поставщика
         </h2>
 <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close-form">
@@ -327,33 +327,33 @@
 </div>
 <form class="space-y-4">
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Название компании *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value="АвтоТрейд [online]"/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Название компании *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value="АвтоТрейд [online]"/>
 </div>
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Контактный Email *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value="returns@avtotrade.demo, sklad@avtotrade.demo"/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Контактный Email *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value="returns@avtotrade.demo, sklad@avtotrade.demo"/>
 <p class="text-xs text-gray-600 mt-1">Можно несколько адресов через запятую, письмо уйдёт на все.</p>
 </div>
 <div>
 <label class="flex items-center gap-2 cursor-pointer">
 <input name="is_active" type="hidden" value="false"/>
-<input checked="" class="rounded" name="is_active" type="checkbox" value="true"/>
-<span class="text-sm text-gray-700 font-medium">Активен</span>
+<input checked="" class="w-4 h-4 rounded accent-black" name="is_active" type="checkbox" value="true"/>
+<span class="text-sm text-gray-800">Активен</span>
 </label>
 </div>
 <div class="flex gap-3 pt-2">
-<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-2xl font-bold hover:bg-brand-400 transition-all text-sm" type="submit">
+<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-xl font-semibold hover:bg-brand-400 transition-colors text-sm" type="submit">
                 Сохранить
             </button>
-<button class="flex-none px-5 py-3 bg-gray-100 text-gray-600 rounded-2xl font-semibold hover:bg-gray-200 transition-all text-sm" data-act="close-form" type="button">
+<button class="flex-none px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-sm" data-act="close-form" type="button">
                 Отмена
             </button>
 </div>
 </form>
-</div></template><template id="maket-form-supplier-2"><div class="p-8">
+</div></template><template id="maket-form-supplier-2"><div class="p-6 sm:p-8">
 <div class="flex items-center justify-between mb-6">
-<h2 class="text-lg font-bold text-gray-900">
+<h2 class="text-lg font-semibold text-gray-900">
             Изменить поставщика
         </h2>
 <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close-form">
@@ -362,33 +362,33 @@
 </div>
 <form class="space-y-4">
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Название компании *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value="Деталь Опт"/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Название компании *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value="Деталь Опт"/>
 </div>
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Контактный Email *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value="vozvrat@detalopt.demo"/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Контактный Email *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value="vozvrat@detalopt.demo"/>
 <p class="text-xs text-gray-600 mt-1">Можно несколько адресов через запятую, письмо уйдёт на все.</p>
 </div>
 <div>
 <label class="flex items-center gap-2 cursor-pointer">
 <input name="is_active" type="hidden" value="false"/>
-<input checked="" class="rounded" name="is_active" type="checkbox" value="true"/>
-<span class="text-sm text-gray-700 font-medium">Активен</span>
+<input checked="" class="w-4 h-4 rounded accent-black" name="is_active" type="checkbox" value="true"/>
+<span class="text-sm text-gray-800">Активен</span>
 </label>
 </div>
 <div class="flex gap-3 pt-2">
-<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-2xl font-bold hover:bg-brand-400 transition-all text-sm" type="submit">
+<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-xl font-semibold hover:bg-brand-400 transition-colors text-sm" type="submit">
                 Сохранить
             </button>
-<button class="flex-none px-5 py-3 bg-gray-100 text-gray-600 rounded-2xl font-semibold hover:bg-gray-200 transition-all text-sm" data-act="close-form" type="button">
+<button class="flex-none px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-sm" data-act="close-form" type="button">
                 Отмена
             </button>
 </div>
 </form>
-</div></template><template id="maket-form-supplier-3"><div class="p-8">
+</div></template><template id="maket-form-supplier-3"><div class="p-6 sm:p-8">
 <div class="flex items-center justify-between mb-6">
-<h2 class="text-lg font-bold text-gray-900">
+<h2 class="text-lg font-semibold text-gray-900">
             Изменить поставщика
         </h2>
 <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close-form">
@@ -397,33 +397,33 @@
 </div>
 <form class="space-y-4">
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Название компании *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value="Север Запчасть"/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Название компании *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value="Север Запчасть"/>
 </div>
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Контактный Email *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value="claims@severzap.demo"/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Контактный Email *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value="claims@severzap.demo"/>
 <p class="text-xs text-gray-600 mt-1">Можно несколько адресов через запятую, письмо уйдёт на все.</p>
 </div>
 <div>
 <label class="flex items-center gap-2 cursor-pointer">
 <input name="is_active" type="hidden" value="false"/>
-<input checked="" class="rounded" name="is_active" type="checkbox" value="true"/>
-<span class="text-sm text-gray-700 font-medium">Активен</span>
+<input checked="" class="w-4 h-4 rounded accent-black" name="is_active" type="checkbox" value="true"/>
+<span class="text-sm text-gray-800">Активен</span>
 </label>
 </div>
 <div class="flex gap-3 pt-2">
-<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-2xl font-bold hover:bg-brand-400 transition-all text-sm" type="submit">
+<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-xl font-semibold hover:bg-brand-400 transition-colors text-sm" type="submit">
                 Сохранить
             </button>
-<button class="flex-none px-5 py-3 bg-gray-100 text-gray-600 rounded-2xl font-semibold hover:bg-gray-200 transition-all text-sm" data-act="close-form" type="button">
+<button class="flex-none px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-sm" data-act="close-form" type="button">
                 Отмена
             </button>
 </div>
 </form>
-</div></template><template id="maket-form-supplier-4"><div class="p-8">
+</div></template><template id="maket-form-supplier-4"><div class="p-6 sm:p-8">
 <div class="flex items-center justify-between mb-6">
-<h2 class="text-lg font-bold text-gray-900">
+<h2 class="text-lg font-semibold text-gray-900">
             Изменить поставщика
         </h2>
 <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close-form">
@@ -432,33 +432,33 @@
 </div>
 <form class="space-y-4">
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Название компании *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value="Мега Парт [online]"/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Название компании *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value="Мега Парт [online]"/>
 </div>
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Контактный Email *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value="support@megapart.demo"/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Контактный Email *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value="support@megapart.demo"/>
 <p class="text-xs text-gray-600 mt-1">Можно несколько адресов через запятую, письмо уйдёт на все.</p>
 </div>
 <div>
 <label class="flex items-center gap-2 cursor-pointer">
 <input name="is_active" type="hidden" value="false"/>
-<input checked="" class="rounded" name="is_active" type="checkbox" value="true"/>
-<span class="text-sm text-gray-700 font-medium">Активен</span>
+<input checked="" class="w-4 h-4 rounded accent-black" name="is_active" type="checkbox" value="true"/>
+<span class="text-sm text-gray-800">Активен</span>
 </label>
 </div>
 <div class="flex gap-3 pt-2">
-<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-2xl font-bold hover:bg-brand-400 transition-all text-sm" type="submit">
+<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-xl font-semibold hover:bg-brand-400 transition-colors text-sm" type="submit">
                 Сохранить
             </button>
-<button class="flex-none px-5 py-3 bg-gray-100 text-gray-600 rounded-2xl font-semibold hover:bg-gray-200 transition-all text-sm" data-act="close-form" type="button">
+<button class="flex-none px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-sm" data-act="close-form" type="button">
                 Отмена
             </button>
 </div>
 </form>
-</div></template><template id="maket-form-supplier-5"><div class="p-8">
+</div></template><template id="maket-form-supplier-5"><div class="p-6 sm:p-8">
 <div class="flex items-center justify-between mb-6">
-<h2 class="text-lg font-bold text-gray-900">
+<h2 class="text-lg font-semibold text-gray-900">
             Изменить поставщика
         </h2>
 <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close-form">
@@ -467,33 +467,33 @@
 </div>
 <form class="space-y-4">
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Название компании *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value="ТехноДеталь"/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Название компании *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value="ТехноДеталь"/>
 </div>
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Контактный Email *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value="returns@tehnodetal.demo"/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Контактный Email *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value="returns@tehnodetal.demo"/>
 <p class="text-xs text-gray-600 mt-1">Можно несколько адресов через запятую, письмо уйдёт на все.</p>
 </div>
 <div>
 <label class="flex items-center gap-2 cursor-pointer">
 <input name="is_active" type="hidden" value="false"/>
-<input checked="" class="rounded" name="is_active" type="checkbox" value="true"/>
-<span class="text-sm text-gray-700 font-medium">Активен</span>
+<input checked="" class="w-4 h-4 rounded accent-black" name="is_active" type="checkbox" value="true"/>
+<span class="text-sm text-gray-800">Активен</span>
 </label>
 </div>
 <div class="flex gap-3 pt-2">
-<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-2xl font-bold hover:bg-brand-400 transition-all text-sm" type="submit">
+<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-xl font-semibold hover:bg-brand-400 transition-colors text-sm" type="submit">
                 Сохранить
             </button>
-<button class="flex-none px-5 py-3 bg-gray-100 text-gray-600 rounded-2xl font-semibold hover:bg-gray-200 transition-all text-sm" data-act="close-form" type="button">
+<button class="flex-none px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-sm" data-act="close-form" type="button">
                 Отмена
             </button>
 </div>
 </form>
-</div></template><template id="maket-form-supplier-new"><div class="p-8">
+</div></template><template id="maket-form-supplier-new"><div class="p-6 sm:p-8">
 <div class="flex items-center justify-between mb-6">
-<h2 class="text-lg font-bold text-gray-900">
+<h2 class="text-lg font-semibold text-gray-900">
             Новый поставщик
         </h2>
 <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" data-act="close-form">
@@ -502,21 +502,21 @@
 </div>
 <form class="space-y-4">
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Название компании *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value=""/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Название компании *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" name="name" placeholder="ООО Запчасть-Опт" required="" type="text" value=""/>
 </div>
 <div>
-<label class="block text-xs font-semibold text-gray-700 mb-1.5">Контактный Email *</label>
-<input class="w-full bg-gray-50 rounded-2xl px-4 py-3 ring-1 ring-gray-200 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value=""/>
+<label class="block text-sm font-medium text-gray-700 mb-1">Контактный Email *</label>
+<input class="w-full bg-white rounded-xl px-3 py-2 ring-1 ring-gray-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-sm" maxlength="1000" name="email" placeholder="supplier@company.ru, second@company.ru" required="" type="text" value=""/>
 <p class="text-xs text-gray-600 mt-1">Можно несколько адресов через запятую, письмо уйдёт на все.</p>
 </div>
 <div class="flex gap-3 pt-2">
-<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-2xl font-bold hover:bg-brand-400 transition-all text-sm" type="submit">
+<button class="flex-1 py-3 bg-brand-500 text-gray-900 rounded-xl font-semibold hover:bg-brand-400 transition-colors text-sm" type="submit">
                 Создать
             </button>
-<button class="flex-none px-5 py-3 bg-gray-100 text-gray-600 rounded-2xl font-semibold hover:bg-gray-200 transition-all text-sm" data-act="close-form" type="button">
+<button class="flex-none px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-sm" data-act="close-form" type="button">
                 Отмена
             </button>
 </div>
 </form>
-</div></template><script src="maket.js?v=5cf3426ce4f8"></script></body></html>
+</div></template><script src="maket.js?v=e54c1e3e7d23"></script></body></html>
