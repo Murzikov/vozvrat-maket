@@ -1,0 +1,267 @@
+body { font-family: 'Inter', sans-serif; }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+
+.table-container::-webkit-scrollbar { height: 4px; }
+.table-container::-webkit-scrollbar-thumb { background: #E6E2DD; border-radius: 10px; }
+
+.htmx-indicator { opacity: 0; transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1); }
+.htmx-request .htmx-indicator { opacity: 1; }
+.htmx-request.htmx-indicator { opacity: 1; }
+/* Подпись загрузки занимает место только во время загрузки. */
+#table-spinner:not(.htmx-request) { display: none; }
+
+body[data-card-can-edit="false"] main button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* Use the table's available width, including space occupied by the sidebar. */
+#refunds-results {
+    container-type: inline-size;
+}
+
+.refunds-table {
+    --refunds-cell-padding: 1rem;
+    --refunds-label-color: #736D66;
+}
+
+.refunds-table th,
+.refunds-table td {
+    padding-inline: var(--refunds-cell-padding);
+}
+
+.refunds-table { table-layout: fixed; }
+.refunds-table th:nth-child(1) { width: 12%; }
+.refunds-table th:nth-child(3) { width: 14%; }
+.refunds-table th:nth-child(4) { width: 10%; }
+.refunds-table th:nth-child(5) { width: 15%; }
+.refunds-table th:nth-child(6) { width: 20%; }
+.refunds-table th:nth-child(7) { width: 3.5rem; }
+
+.refunds-table td:nth-child(2),
+.refunds-table td:nth-child(3) {
+    overflow-wrap: anywhere;
+}
+
+.refunds-table td:nth-child(1),
+.refunds-table td:nth-child(4),
+.refunds-table td:nth-child(5),
+.refunds-table td:nth-child(6),
+.refunds-table td:nth-child(7) {
+    white-space: nowrap;
+}
+
+.refunds-table td:nth-child(6) > span {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Суммы друг под другом: по правому краю, цифры одной ширины. */
+.refunds-table th:nth-child(4),
+.refunds-table td:nth-child(4) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+@container (max-width: 56rem) {
+    .refunds-table,
+    .refunds-table tbody { display: block; }
+
+    .refunds-table thead { display: none; }
+
+    .refunds-table tr:not(.hidden) {
+        display: grid;
+        grid-template-columns: minmax(min-content, 1fr) minmax(0, 1fr);
+        grid-template-areas: "id action" "client client" "article article" "amount sent" "status status";
+        gap: 0.75rem 1rem;
+        padding: var(--refunds-cell-padding);
+    }
+
+    .refunds-table td { padding: 0; min-width: 0; }
+    .refunds-table td:nth-child(1) { grid-area: id; }
+    .refunds-table td:nth-child(2) { grid-area: client; }
+    .refunds-table td:nth-child(3) { grid-area: article; }
+    .refunds-table td:nth-child(4) { grid-area: amount; text-align: left; }
+    .refunds-table td:nth-child(5) { grid-area: sent; }
+    .refunds-table td:nth-child(6) { grid-area: status; }
+    .refunds-table td:nth-child(7) { grid-area: action; text-align: right; }
+    .refunds-table td[colspan] { grid-column: 1 / -1; padding-block: 2rem; }
+
+    .refunds-table td[data-label]:not([data-label=""])::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--refunds-label-color);
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: normal;
+    }
+
+    .refunds-table + div > div {
+        flex-wrap: wrap;
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+/* Список запросов на узком экране карточками, как возвраты. */
+#requests-results {
+    container-type: inline-size;
+}
+
+@container (max-width: 56rem) {
+    .requests-table,
+    .requests-table tbody { display: block; }
+
+    .requests-table thead { display: none; }
+
+    .requests-table tr:not(.hidden) {
+        display: grid;
+        grid-template-columns: minmax(min-content, 1fr) minmax(0, 1fr);
+        grid-template-areas: "id action" "client client" "article executor" "status status";
+        gap: 0.75rem 1rem;
+        padding: 1rem;
+    }
+
+    .requests-table td { padding: 0; min-width: 0; }
+    .requests-table td:nth-child(1) { grid-area: id; }
+    .requests-table td:nth-child(2) { grid-area: client; }
+    .requests-table td:nth-child(3) { grid-area: article; }
+    .requests-table td:nth-child(4) { grid-area: executor; }
+    .requests-table td:nth-child(5) { grid-area: status; }
+    .requests-table td:nth-child(6) { grid-area: action; text-align: right; }
+    .requests-table td[colspan] { grid-column: 1 / -1; padding-block: 2rem; }
+
+    .requests-table td[data-label]:not([data-label=""])::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 0.25rem;
+        color: #736D66;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .requests-table + div > div {
+        flex-wrap: wrap;
+        min-width: 0;
+        max-width: 100%;
+    }
+}
+
+@container (max-width: 18rem) {
+    .refunds-table tr {
+        grid-template-areas: "id id" "action action" "client client" "article article" "amount amount" "sent sent" "status status";
+    }
+}
+
+/* Плитки файлов: превью, под ним размер и действия. */
+.attachment-container { min-width: 0; }
+.attachment-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+    gap: 0.5rem;
+}
+.attachment-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.25rem;
+    min-width: 0;
+}
+.attachment-thumb {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 4.5rem;
+}
+.attachment-info { display: contents; }
+.attachment-name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+.attachment-size {
+    overflow: hidden;
+    color: #736D66;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.attachment-actions { display: flex; gap: 0.125rem; }
+.attachment-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: none;
+    border: 1px solid #E6E2DD;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+.attachment-action svg { width: 0.875rem; height: 0.875rem; }
+.attachment-action:focus-visible {
+    outline: 2px solid #2F2E2D;
+    outline-offset: 2px;
+}
+@media (pointer: coarse) {
+    .attachment-list { grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); }
+    .attachment-action { width: 2.25rem; height: 2.25rem; }
+}
+#image-lightbox-name { max-width: 100%; overflow-wrap: anywhere; }
+
+/* Переход из колокольчика к нужному месту карточки: блок подсвечен рамкой. */
+#comments:target { box-shadow: 0 0 0 3px #E9CD6A; }
+#chat:target { box-shadow: 0 0 0 3px #F9BD7A; }
+
+/* Тост и окно уведомлений коротко проявляются и сдвигаются на несколько пикселей. */
+#toast-container > div,
+#desktop-bell-dropdown,
+#mobile-bell-dropdown {
+    animation: drop-in 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes drop-in {
+    from { opacity: 0; transform: translateY(-6px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    #toast-container > div,
+    #desktop-bell-dropdown,
+    #mobile-bell-dropdown { animation: none; }
+}
+
+/* Подсказки в полях читаются (по умолчанию у Tailwind 2,6:1): в них важное, например «можно вставить фото из буфера». */
+input::placeholder, textarea::placeholder { color: #736D66; }
+
+/* Пустой список серый, как подсказка в поле: видно, что ничего не выбрано. */
+select:has(option[value=""]:checked) { color: #736D66; }
+select option { color: #2F2E2D; }
+
+/* iPhone приближает страницу, если шрифт поля мельче 16px. На телефоне поля 16px, на компьютере как в разметке. */
+@media (max-width: 767px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+    select,
+    textarea { font-size: 16px !important; }
+}
+
+/* «Отменить» смену статуса выезжает из-под нового статуса и через несколько секунд уезжает обратно. */
+.status-undo { position: absolute; left: 50%; top: 100%; margin-top: 6px; transform: translateX(-50%); animation: status-undo-in 180ms ease-out; }
+.status-undo.is-leaving { animation: status-undo-out 180ms ease-in forwards; pointer-events: none; }
+@keyframes status-undo-in { from { opacity: 0; transform: translate(-50%, -10px); } }
+@keyframes status-undo-out { to { opacity: 0; transform: translate(-50%, -10px); } }
+/* Если под статусом другие кнопки (узкий экран, кнопки переносятся), «Отменить» встаёт рядом со статусом. */
+.status-undo.is-inline { position: static; margin: 0 0 0 6px; transform: none; animation-name: status-undo-in-inline; }
+.status-undo.is-inline.is-leaving { animation-name: status-undo-out-inline; }
+@keyframes status-undo-in-inline { from { opacity: 0; transform: translateY(-6px); } }
+@keyframes status-undo-out-inline { to { opacity: 0; transform: translateY(-6px); } }
+/* Отсчёт в кнопке: цифра в кольце, кольцо убывает за то же время, что живёт кнопка. */
+.undo-timer { width: 20px; height: 20px; flex-shrink: 0; }
+.undo-timer circle { fill: none; stroke-width: 2; }
+/* y = центр кольца + половина высоты цифр Inter (0,727 em): цифра встаёт ровно в середину. */
+.undo-digit { fill: currentColor; font-size: 10px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.undo-track { stroke: rgb(255 255 255 / 0.25); }
+.undo-ring { stroke: #fff; stroke-linecap: round; stroke-dasharray: 53.41; animation: undo-ring var(--undo-seconds, 5s) linear forwards; }
+@keyframes undo-ring { to { stroke-dashoffset: 53.41; } }
+@media (prefers-reduced-motion: reduce) { .status-undo, .status-undo.is-leaving { animation-duration: 1ms; } }
